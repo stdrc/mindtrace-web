@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+除非特别说明，否则写完代码之后，不要 preview 或 dev 运行 server。如果有必要，可以 build 检查是否能构建。

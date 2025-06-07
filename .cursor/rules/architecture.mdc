@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+你可以在项目根目录创建 architecture.md 来描述项目结构，随后的任务中你可以直接读取该文件内容来了解项目结构。

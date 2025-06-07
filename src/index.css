@@ -1,0 +1,327 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    /* 防止整个页面的橡皮筋效果 */
+    overflow: hidden;
+    height: 100%;
+  }
+  
+  * {
+    box-sizing: border-box;
+    /* 默认让所有元素不可选中 */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* 防止页面级别的滚动 */
+    overflow: hidden;
+    background-color: #ffffff; /* 纯白背景 */
+  }
+  
+  #root {
+    height: 100vh;
+    height: 100dvh; /* 动态视口高度，考虑iOS地址栏变化 */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #ffffff;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply rounded-lg transition-all duration-200 font-medium;
+    padding: 0.5rem 0.75rem; /* 手机端使用更紧凑的padding */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+  }
+  
+  @media (min-width: 640px) {
+    .btn {
+      padding: 0.5rem 1rem; /* 较大屏幕使用原来的padding */
+    }
+  }
+  
+  .btn-primary {
+    @apply text-white bg-gray-900 border-gray-900;
+  }
+  
+  .btn-primary:hover {
+    @apply bg-gray-700 border-gray-700;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .btn-secondary {
+    @apply text-gray-700 bg-white border-gray-300;
+  }
+  
+  .btn-secondary:hover {
+    @apply bg-gray-50 border-gray-400;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .btn-danger {
+    @apply text-white bg-red-600 border-red-600;
+  }
+  
+  .btn-danger:hover {
+    @apply bg-red-700 border-red-700;
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+  }
+  
+  /* Modal buttons without hover transform effect */
+  .btn-modal:hover {
+    transform: none !important;
+  }
+  
+  .input {
+    @apply w-full rounded-lg transition-all duration-200;
+    padding: 0.75rem; /* 手机端使用更紧凑的padding */
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    color: #111827;
+    /* 输入框内容应该可选中 */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  @media (min-width: 640px) {
+    .input {
+      padding: 0.75rem; /* 较大屏幕保持原来的padding */
+    }
+  }
+  
+  .input:focus {
+    outline: none;
+    border-color: #6b7280;
+    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.1);
+    background: #ffffff;
+  }
+  
+  /* 现代简约卡片 */
+  .modern-card {
+    background: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    position: relative;
+  }
+
+  /* 现代简约页眉 */
+  .modern-header {
+    background: #ffffff;
+    border-bottom: 1px solid #f3f4f6;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    position: relative;
+  }
+  
+  .modern-page {
+    background: #fafafa;
+    position: relative;
+  }
+  
+  /* 移动端优先的响应式容器 */
+  .content-container {
+    @apply w-full mx-auto;
+    max-width: 100%;
+  }
+  
+  /* 平板和桌面端限制最大宽度 */
+  @media (min-width: 768px) {
+    .content-container {
+      max-width: 768px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .content-container {
+      max-width: 800px;
+    }
+  }
+  
+  /* iPad 特殊优化 */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .content-container {
+      max-width: 85%; /* iPad上使用更大的宽度比例 */
+    }
+    
+    .diary-card {
+      padding: 1.25rem; /* iPad上使用中等padding */
+    }
+  }
+  
+  /* 大屏手机优化 (iPhone Plus, Max等) */
+  @media (min-width: 414px) and (max-width: 767px) {
+    .content-container {
+      max-width: 100%;
+    }
+    
+    .diary-card {
+      margin: 0 0.25rem; /* 大屏手机上稍微增加边距 */
+    }
+  }
+  
+  /* 小屏手机优化 */
+  @media (max-width: 413px) {
+    .diary-card {
+      margin: 0; /* 小屏手机上去掉边距 */
+      border-radius: 6px; /* 稍微减小圆角 */
+    }
+    
+    .modern-header .flex {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+    
+    .modern-title {
+      font-size: 1.25rem; /* 小屏手机上减小标题字体 */
+    }
+  }
+  
+  /* iPad Header 优化 */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .modern-header .flex {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  /* 可滚动内容区域 */
+  .scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    /* 在内容区域内允许橡皮筋效果 */
+    overscroll-behavior-y: contain;
+  }
+  
+  /* 现代简约标题样式 */
+  .modern-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    color: #111827;
+    font-weight: 600;
+  }
+  
+  /* 现代简约内容文本 */
+  .modern-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    color: #374151;
+    line-height: 1.6;
+  }
+  
+  /* 日期标签 - 现代简约版 */
+  .date-label {
+    background: #f9fafb;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    /* 日期标签可以选中 */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+
+  /* 保持向后兼容的类名映射 */
+  .diary-card {
+    @apply modern-card;
+  }
+
+  .diary-header {
+    @apply modern-header;
+  }
+
+  .diary-page {
+    @apply modern-page;
+  }
+
+  .diary-title {
+    @apply modern-title;
+  }
+
+  .diary-text {
+    @apply modern-text;
+  }
+  
+  /* 专门为可选中的内容添加类 */
+  .selectable-text {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  /* 卡片内容应该可选中 */
+  .thought-content {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+}
+
+/* iOS Safari 专用修复 */
+@supports (-webkit-touch-callout: none) {
+  body {
+    /* 防止整个页面的橡皮筋效果 */
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* 固定导航栏 */
+  .fixed-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+  }
+  
+  /* 主内容区域 */
+  .main-content {
+    position: fixed !important;
+    top: 64px !important; /* header height */
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: contain !important;
+  }
+}
+
+/* 非iOS设备的备用方案 */
+@supports not (-webkit-touch-callout: none) {
+  /* 桌面端和Android设备保持原有behavior */
+  .fixed-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 50 !important;
+  }
+}
