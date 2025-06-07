@@ -19,7 +19,7 @@ interface ThoughtContextType {
 
 const ThoughtContext = createContext<ThoughtContextType | undefined>(undefined);
 
-const PAGE_SIZE = 20;
+const DAYS_PER_LOAD = 2; // 每次加载2天的数据
 
 export function ThoughtProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
@@ -27,7 +27,7 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(0);
+  const [lastLoadedDate, setLastLoadedDate] = useState<string | null>(null);
 
   // Load initial thoughts
   useEffect(() => {
@@ -46,19 +46,50 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
     setError(null);
     
     try {
+      // 获取用户最近的日期，然后按日期分批加载
+      const { data: recentDates, error: dateError } = await supabase
+        .from('thoughts')
+        .select('date')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false })
+        .limit(100); // 获取最近100个记录的日期来找到不同的日期
+      
+      if (dateError) throw dateError;
+      
+      if (recentDates.length === 0) {
+        setThoughts({});
+        setHasMore(false);
+        setLastLoadedDate(null);
+        return;
+      }
+      
+      // 获取去重的日期，按日期降序排列
+      const uniqueDates = [...new Set(recentDates.map(item => item.date))].sort((a, b) => b.localeCompare(a));
+      
+      // 取前 DAYS_PER_LOAD 天的数据
+      const datesToLoad = uniqueDates.slice(0, DAYS_PER_LOAD);
+      
+      if (datesToLoad.length === 0) {
+        setThoughts({});
+        setHasMore(false);
+        setLastLoadedDate(null);
+        return;
+      }
+      
+      // 加载这些日期的所有 thoughts
       const { data, error } = await supabase
         .from('thoughts')
         .select('*')
         .eq('user_id', user.id)
+        .in('date', datesToLoad)
         .order('date', { ascending: false })
-        .order('created_at', { ascending: false })
-        .range(0, PAGE_SIZE - 1);
+        .order('created_at', { ascending: false });
       
       if (error) throw error;
       
       setThoughts(processThoughts(data));
-      setHasMore(data.length === PAGE_SIZE);
-      setPage(1);
+      setHasMore(uniqueDates.length > DAYS_PER_LOAD);
+      setLastLoadedDate(datesToLoad[datesToLoad.length - 1]); // 记录最后加载的日期
     } catch (err) {
       setError('Failed to load thoughts');
       console.error(err);
@@ -68,18 +99,46 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
   };
 
   const loadMoreThoughts = async () => {
-    if (!user || !hasMore) return;
+    if (!user || !hasMore || !lastLoadedDate) return;
     
     setLoading(true);
     
     try {
+      // 获取比 lastLoadedDate 更早的日期
+      const { data: olderDates, error: dateError } = await supabase
+        .from('thoughts')
+        .select('date')
+        .eq('user_id', user.id)
+        .lt('date', lastLoadedDate)
+        .order('date', { ascending: false })
+        .limit(100); // 获取100个记录的日期来找到不同的日期
+      
+      if (dateError) throw dateError;
+      
+      if (olderDates.length === 0) {
+        setHasMore(false);
+        return;
+      }
+      
+      // 获取去重的日期，按日期降序排列
+      const uniqueDates = [...new Set(olderDates.map(item => item.date))].sort((a, b) => b.localeCompare(a));
+      
+      // 取前 DAYS_PER_LOAD 天的数据
+      const datesToLoad = uniqueDates.slice(0, DAYS_PER_LOAD);
+      
+      if (datesToLoad.length === 0) {
+        setHasMore(false);
+        return;
+      }
+      
+      // 加载这些日期的所有 thoughts
       const { data, error } = await supabase
         .from('thoughts')
         .select('*')
         .eq('user_id', user.id)
+        .in('date', datesToLoad)
         .order('date', { ascending: false })
-        .order('created_at', { ascending: false })
-        .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+        .order('created_at', { ascending: false });
       
       if (error) throw error;
       
@@ -89,8 +148,8 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
       }
       
       setThoughts(prevThoughts => mergeAndProcessThoughts(prevThoughts, data));
-      setHasMore(data.length === PAGE_SIZE);
-      setPage(page + 1);
+      setHasMore(uniqueDates.length >= DAYS_PER_LOAD); // 如果这次加载的日期数量达到了 DAYS_PER_LOAD，说明可能还有更多
+      setLastLoadedDate(datesToLoad[datesToLoad.length - 1]); // 更新最后加载的日期
     } catch (err) {
       setError('Failed to load more thoughts');
       console.error(err);
