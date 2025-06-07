@@ -1,5 +1,7 @@
 # MindTrace
 
+> Disclaimer: This project is 100% vibe coded.
+
 MindTrace is a personal thought-recording application that allows you to log your thoughts with date organization. The application uses a chat-like interface to make recording thoughts quick and intuitive.
 
 ## Features
