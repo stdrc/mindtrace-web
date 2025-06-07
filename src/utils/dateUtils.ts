@@ -26,6 +26,32 @@ export function formatDateForDisplay(dateString: string): string {
 }
 
 /**
+ * Calculate life days from birth date to target date
+ * Returns null if birthDate is not provided or date is before birth
+ */
+export function calculateLifeDays(dateString: string, birthDate: string | null): number | null {
+  if (!birthDate) {
+    return null;
+  }
+  
+  const targetDate = new Date(dateString);
+  const birth = new Date(birthDate);
+  
+  // Reset time to avoid timezone issues
+  targetDate.setHours(0, 0, 0, 0);
+  birth.setHours(0, 0, 0, 0);
+  
+  const diffTime = targetDate.getTime() - birth.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays < 0) {
+    return null;
+  }
+  
+  return diffDays + 1; // +1 because birth day is day 1
+}
+
+/**
  * Sorts dates from newest to oldest
  */
 export function sortDatesDesc(dates: string[]): string[] {

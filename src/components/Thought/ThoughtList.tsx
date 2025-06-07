@@ -1,11 +1,13 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useThoughts } from '../../contexts/ThoughtContext';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 import ThoughtItem from './ThoughtItem';
-import { formatDateForDisplay, sortDatesDesc } from '../../utils/dateUtils';
+import { calculateLifeDays, formatDateForDisplay, sortDatesDesc } from '../../utils/dateUtils';
 import EmptyState from './EmptyState';
 
 export default function ThoughtList() {
   const { thoughts, loading, loadMoreThoughts, hasMore } = useThoughts();
+  const { profile } = useUserProfile();
   const observer = useRef<IntersectionObserver | null>(null);
   const loadingRef = useRef<HTMLDivElement>(null);
 
@@ -56,7 +58,22 @@ export default function ThoughtList() {
             </div>
             <div className="relative flex justify-center">
               <span className="date-label px-4 py-2 rounded-full">
-                {formatDateForDisplay(date)}
+                {(() => {
+                  const lifeDays = calculateLifeDays(date, profile?.birth_date || null);
+                  const calendarDate = formatDateForDisplay(date);
+                  
+                  if (lifeDays) {
+                    return (
+                      <>
+                        <span className="selectable-text">{lifeDays}</span>
+                        <span className="mx-1" style={{ userSelect: 'none' }}>·</span>
+                        <span className="selectable-text">{calendarDate}</span>
+                      </>
+                    );
+                  } else {
+                    return <span className="selectable-text">{calendarDate}</span>;
+                  }
+                })()}
               </span>
             </div>
           </div>

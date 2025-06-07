@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useHiddenToggleContext } from '../../contexts/HiddenToggleContext';
 import Button from '../UI/Button';
@@ -8,6 +9,7 @@ import Icon from '../UI/Icon';
 export default function Header() {
   const { user, signOut } = useAuth();
   const { hideHiddenThoughts, toggleHiddenVisibility } = useHiddenToggleContext();
+  const navigate = useNavigate();
   const [isShowHiddenModalOpen, setIsShowHiddenModalOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -56,9 +58,12 @@ export default function Header() {
                   <Icon name={hideHiddenThoughts ? 'lock' : 'unlock'} />
                 </button>
                 
-                <span className="text-sm diary-text hidden sm:block selectable-text">
-                  {user.email}
-                </span>
+                <button
+                  onClick={() => navigate('/profile')}
+                  className="text-sm diary-text hidden sm:block selectable-text hover:text-gray-900 transition-colors"
+                >
+                  Profile
+                </button>
                 <Button 
                   variant="secondary"
                   size="sm"
