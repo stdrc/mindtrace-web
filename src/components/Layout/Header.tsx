@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useHiddenToggleContext } from '../../contexts/HiddenToggleContext';
 import Button from '../UI/Button';
@@ -7,14 +7,14 @@ import Modal from '../UI/Modal';
 import Icon from '../UI/Icon';
 
 export default function Header() {
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { hideHiddenThoughts, toggleHiddenVisibility } = useHiddenToggleContext();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isShowHiddenModalOpen, setIsShowHiddenModalOpen] = useState(false);
 
-  const handleSignOut = async () => {
-    await signOut();
-  };
+  // Don't show lock button on profile page
+  const isProfilePage = location.pathname === '/profile';
 
   const handleEyeButtonClick = () => {
     // If currently hiding hidden thoughts and user wants to show them, show confirmation modal
@@ -46,31 +46,29 @@ export default function Header() {
             
             {user && (
               <div className="flex items-center space-x-4">
-                <button
-                  onClick={handleEyeButtonClick}
-                  className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    hideHiddenThoughts
-                      ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
-                  title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
-                >
-                  <Icon name={hideHiddenThoughts ? 'lock' : 'unlock'} />
-                </button>
+                {!isProfilePage && (
+                  <button
+                    onClick={handleEyeButtonClick}
+                    className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      hideHiddenThoughts
+                        ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                    }`}
+                    title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
+                  >
+                    <Icon name={hideHiddenThoughts ? 'lock' : 'unlock'} />
+                  </button>
+                )}
                 
+                {/* Profile link - text on desktop, icon on mobile */}
                 <button
                   onClick={() => navigate('/profile')}
-                  className="text-sm diary-text hidden sm:block selectable-text hover:text-gray-900 transition-colors"
+                  className="flex items-center text-sm diary-text hover:text-gray-900 transition-colors"
+                  title="Profile"
                 >
-                  Profile
+                  <span className="hidden sm:inline">Profile</span>
+                  <Icon name="user" className="w-4 h-4 sm:hidden" />
                 </button>
-                <Button 
-                  variant="secondary"
-                  size="sm"
-                  onClick={handleSignOut}
-                >
-                  Sign Out
-                </Button>
               </div>
             )}
           </div>

@@ -6,7 +6,7 @@ import Layout from '../components/Layout/Layout';
 import Button from '../components/UI/Button';
 
 export default function ProfilePage() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const { profile, loading: profileLoading, error, updateProfile, getDaysSinceBirth } = useUserProfile();
   const navigate = useNavigate();
   
@@ -60,6 +60,10 @@ export default function ProfilePage() {
   const handleCancel = () => {
     setBirthDate(profile?.birth_date || '');
     setIsEditing(false);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
   };
 
   const daysSinceBirth = getDaysSinceBirth();
@@ -167,6 +171,27 @@ export default function ProfilePage() {
               <p className="diary-text text-xs opacity-60 mt-1">
                 Your birth date is used to calculate life days displayed in the thought timeline
               </p>
+            </div>
+
+            {/* Account Actions */}
+            <div className="pt-4 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="diary-text text-sm font-medium mb-1">
+                    Account Actions
+                  </div>
+                  <div className="diary-text text-xs opacity-60">
+                    Sign out of your account
+                  </div>
+                </div>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={handleSignOut}
+                >
+                  Sign Out
+                </Button>
+              </div>
             </div>
           </div>
         </div>
