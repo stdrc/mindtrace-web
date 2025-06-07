@@ -1,12 +1,6 @@
-export interface Thought {
-  id: string;
-  user_id: string;
-  date: string; // YYYY-MM-DD format
-  content: string;
-  hidden: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import type { Thought } from './supabase';
+
+export type { Thought };
 
 export interface ThoughtWithNumber extends Thought {
   number: number; // UI display number (not stored in DB)

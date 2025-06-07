@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ThoughtWithNumber } from '../../types/thought';
 import { useThoughts } from '../../contexts/ThoughtContext';
 import { useHiddenToggleContext } from '../../contexts/HiddenToggleContext';
+import { useThoughtOperations } from '../../hooks/useThoughtOperations';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import Icon from '../UI/Icon';
@@ -13,13 +14,12 @@ interface ThoughtItemProps {
 export default function ThoughtItem({ thought }: ThoughtItemProps) {
   const { updateThought, deleteThought, toggleThoughtHidden } = useThoughts();
   const { hideHiddenThoughts } = useHiddenToggleContext();
+  const { operationStates, setOperationLoading } = useThoughtOperations();
+  
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(thought.content);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isToggleHiddenModalOpen, setIsToggleHiddenModalOpen] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isTogglingHidden, setIsTogglingHidden] = useState(false);
 
   const handleEdit = () => {
     setEditContent(thought.content);
@@ -34,40 +34,78 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
   const handleSaveEdit = async () => {
     if (!editContent.trim()) return;
     
-    setIsUpdating(true);
+    setOperationLoading('update', true);
     try {
       await updateThought(thought.id, editContent.trim());
       setIsEditing(false);
     } catch (error) {
       console.error('Failed to update thought:', error);
     } finally {
-      setIsUpdating(false);
+      setOperationLoading('update', false);
     }
   };
 
   const handleDelete = async () => {
-    setIsDeleting(true);
+    setOperationLoading('delete', true);
     try {
       await deleteThought(thought.id);
       setIsDeleteModalOpen(false);
     } catch (error) {
       console.error('Failed to delete thought:', error);
     } finally {
-      setIsDeleting(false);
+      setOperationLoading('delete', false);
     }
   };
 
   const handleToggleHidden = async () => {
-    setIsTogglingHidden(true);
+    setOperationLoading('toggleHidden', true);
     try {
       await toggleThoughtHidden(thought.id);
       setIsToggleHiddenModalOpen(false);
     } catch (error) {
       console.error('Failed to toggle thought visibility:', error);
     } finally {
-      setIsTogglingHidden(false);
+      setOperationLoading('toggleHidden', false);
     }
   };
+
+  const renderModal = (
+    isOpen: boolean,
+    onClose: () => void,
+    title: string,
+    content: string,
+    onConfirm: () => void,
+    confirmText: string,
+    isLoading: boolean,
+    variant: 'danger' | 'primary' = 'primary'
+  ) => (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={title}
+      footer={
+        <>
+          <Button
+            variant="secondary"
+            onClick={onClose}
+            disabled={isLoading}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant={variant}
+            onClick={onConfirm}
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
+            {confirmText}
+          </Button>
+        </>
+      }
+    >
+      <p className="diary-text selectable-text">{content}</p>
+    </Modal>
+  );
 
   return (
     <>
@@ -123,15 +161,15 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
                 variant="secondary"
                 size="sm"
                 onClick={handleCancelEdit}
-                disabled={isUpdating}
+                disabled={operationStates.update}
               >
                 Cancel
               </Button>
               <Button
                 size="sm"
                 onClick={handleSaveEdit}
-                isLoading={isUpdating}
-                disabled={isUpdating}
+                isLoading={operationStates.update}
+                disabled={operationStates.update}
               >
                 Save
               </Button>
@@ -150,63 +188,28 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
         )}
       </div>
 
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        title="Delete Thought"
-        footer={
-          <>
-            <Button
-              variant="secondary"
-              onClick={() => setIsDeleteModalOpen(false)}
-              disabled={isDeleting}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="danger"
-              onClick={handleDelete}
-              isLoading={isDeleting}
-              disabled={isDeleting}
-            >
-              Delete
-            </Button>
-          </>
-        }
-      >
-        <p className="diary-text selectable-text">Are you sure you want to delete this thought? This action cannot be undone.</p>
-      </Modal>
+      {renderModal(
+        isDeleteModalOpen,
+        () => setIsDeleteModalOpen(false),
+        "Delete Thought",
+        "Are you sure you want to delete this thought? This action cannot be undone.",
+        handleDelete,
+        "Delete",
+        operationStates.delete,
+        'danger'
+      )}
 
-      <Modal
-        isOpen={isToggleHiddenModalOpen}
-        onClose={() => setIsToggleHiddenModalOpen(false)}
-        title={thought.hidden ? "Unlock Thought" : "Lock Thought"}
-        footer={
-          <>
-            <Button
-              variant="secondary"
-              onClick={() => setIsToggleHiddenModalOpen(false)}
-              disabled={isTogglingHidden}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleToggleHidden}
-              isLoading={isTogglingHidden}
-              disabled={isTogglingHidden}
-            >
-              {thought.hidden ? "Unlock" : "Lock"}
-            </Button>
-          </>
-        }
-      >
-        <p className="diary-text selectable-text">
-          {thought.hidden 
-            ? "Are you sure you want to unlock this thought? It will be visible again."
-            : "Are you sure you want to lock this thought? It will be hidden from the main view."
-          }
-        </p>
-      </Modal>
+      {renderModal(
+        isToggleHiddenModalOpen,
+        () => setIsToggleHiddenModalOpen(false),
+        thought.hidden ? "Unlock Thought" : "Lock Thought",
+        thought.hidden 
+          ? "Are you sure you want to unlock this thought? It will be visible again."
+          : "Are you sure you want to lock this thought? It will be hidden from the main view.",
+        handleToggleHidden,
+        thought.hidden ? "Unlock" : "Lock",
+        operationStates.toggleHidden
+      )}
     </>
   );
 } 

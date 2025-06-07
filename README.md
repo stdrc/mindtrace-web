@@ -10,6 +10,7 @@ MindTrace is a personal thought-recording application that allows you to log you
 - Record thoughts with date selection (today, yesterday, or custom date)
 - Chat-like UI with newest thoughts at the bottom
 - Edit and delete functionality
+- Hide/show thoughts functionality for privacy
 - Lazy loading for older thoughts
 - Thoughts grouped by date with sequential numbering within each date
 
@@ -46,6 +47,7 @@ MindTrace is a personal thought-recording application that allows you to log you
      user_id UUID REFERENCES auth.users(id),
      date DATE NOT NULL,
      content TEXT NOT NULL,
+     hidden BOOLEAN DEFAULT FALSE,
      created_at TIMESTAMPTZ DEFAULT NOW(),
      updated_at TIMESTAMPTZ DEFAULT NOW()
    );

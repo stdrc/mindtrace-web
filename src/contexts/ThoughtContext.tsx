@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
-import type { Thought, ThoughtWithNumber, ThoughtsByDate } from '../types/thought';
+import type { ThoughtWithNumber, ThoughtsByDate } from '../types/thought';
 import { useAuth } from './AuthContext';
+import { processThoughts, assignThoughtNumbers, mergeAndProcessThoughts } from '../utils/thoughtUtils';
 
 interface ThoughtContextType {
   thoughts: ThoughtsByDate;
@@ -37,42 +38,6 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     }
   }, [user]);
-
-  // Group thoughts by date and add number
-  const processThoughts = (thoughts: Thought[]): ThoughtsByDate => {
-    const grouped: ThoughtsByDate = {};
-    
-    // Group by date
-    thoughts.forEach(thought => {
-      if (!grouped[thought.date]) {
-        grouped[thought.date] = [];
-      }
-      grouped[thought.date].push({
-        ...thought,
-        number: 0, // Temporary placeholder
-      });
-    });
-    
-    // Sort each group by created_at desc (latest first) but assign numbers in creation order
-    Object.keys(grouped).forEach(date => {
-      // First sort by creation time (asc) to assign proper sequential numbers
-      const sortedForNumbering = [...grouped[date]].sort((a, b) => 
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-      );
-      
-      // Assign numbers based on creation order
-      sortedForNumbering.forEach((thought, index) => {
-        thought.number = index + 1;
-      });
-      
-      // Then sort by created_at desc for display
-      grouped[date].sort((a, b) => 
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-    });
-    
-    return grouped;
-  };
 
   const loadThoughts = async () => {
     if (!user) return;
@@ -123,39 +88,7 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
         return;
       }
       
-      const newThoughts = { ...thoughts };
-      const processedData = processThoughts(data);
-      
-      // Merge the new thoughts with existing thoughts
-      Object.keys(processedData).forEach(date => {
-        if (newThoughts[date]) {
-          // If we already have thoughts for this date, append and renumber
-          const existingThoughts = newThoughts[date];
-          const combinedThoughts = [...existingThoughts, ...processedData[date]];
-          
-          // First sort by creation time (asc) to assign proper sequential numbers
-          const sortedForNumbering = [...combinedThoughts].sort((a, b) => 
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-          );
-          
-          // Assign numbers based on creation order
-          sortedForNumbering.forEach((thought, index) => {
-            thought.number = index + 1;
-          });
-          
-          // Then sort by created_at desc for display
-          combinedThoughts.sort((a, b) => 
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          );
-          
-          newThoughts[date] = combinedThoughts;
-        } else {
-          // If this is a new date, just add it
-          newThoughts[date] = processedData[date];
-        }
-      });
-      
-      setThoughts(newThoughts);
+      setThoughts(prevThoughts => mergeAndProcessThoughts(prevThoughts, data));
       setHasMore(data.length === PAGE_SIZE);
       setPage(page + 1);
     } catch (err) {
@@ -186,35 +119,23 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
       
       // Update local state
-      const newThoughts = { ...thoughts };
-      
-      if (!newThoughts[date]) {
-        newThoughts[date] = [];
-      }
-      
-      const thoughtWithNumber: ThoughtWithNumber = {
-        ...data,
-        number: 1 // Will be recalculated after sorting
-      };
-      
-      newThoughts[date].push(thoughtWithNumber);
-      
-      // First sort by creation time (asc) to assign proper sequential numbers
-      const sortedForNumbering = [...newThoughts[date]].sort((a, b) => 
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-      );
-      
-      // Assign numbers based on creation order
-      sortedForNumbering.forEach((thought, index) => {
-        thought.number = index + 1;
+      setThoughts(prevThoughts => {
+        const newThoughts = { ...prevThoughts };
+        
+        if (!newThoughts[date]) {
+          newThoughts[date] = [];
+        }
+        
+        const thoughtWithNumber: ThoughtWithNumber = {
+          ...data,
+          number: 1 // Will be recalculated after sorting
+        };
+        
+        newThoughts[date].push(thoughtWithNumber);
+        assignThoughtNumbers(newThoughts[date]);
+        
+        return newThoughts;
       });
-      
-      // Then sort desc (latest first) for display
-      newThoughts[date].sort((a, b) => 
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-      
-      setThoughts(newThoughts);
     } catch (err) {
       setError('Failed to add thought');
       console.error(err);
@@ -234,18 +155,20 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
       
       // Update local state
-      const newThoughts = { ...thoughts };
-      
-      // Find and update the thought
-      Object.keys(newThoughts).forEach(date => {
-        const index = newThoughts[date].findIndex(t => t.id === id);
-        if (index !== -1) {
-          newThoughts[date][index].content = content;
-          newThoughts[date][index].updated_at = new Date().toISOString();
-        }
+      setThoughts(prevThoughts => {
+        const newThoughts = { ...prevThoughts };
+        
+        // Find and update the thought
+        Object.keys(newThoughts).forEach(date => {
+          const index = newThoughts[date].findIndex(t => t.id === id);
+          if (index !== -1) {
+            newThoughts[date][index].content = content;
+            newThoughts[date][index].updated_at = new Date().toISOString();
+          }
+        });
+        
+        return newThoughts;
       });
-      
-      setThoughts(newThoughts);
     } catch (err) {
       setError('Failed to update thought');
       console.error(err);
@@ -265,38 +188,34 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
       
       // Update local state
-      const newThoughts = { ...thoughts };
-      let dateToDelete: string | null = null;
-      
-      // Find and remove the thought, then renumber
-      Object.keys(newThoughts).forEach(date => {
-        const index = newThoughts[date].findIndex(t => t.id === id);
-        if (index !== -1) {
-          // Remove the thought
-          newThoughts[date].splice(index, 1);
-          
-          // Renumber the remaining thoughts based on creation order
-          const sortedForNumbering = [...newThoughts[date]].sort((a, b) => 
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-          );
-          
-          sortedForNumbering.forEach((thought, i) => {
-            thought.number = i + 1;
-          });
-          
-          // If this date has no more thoughts, mark it for deletion
-          if (newThoughts[date].length === 0) {
-            dateToDelete = date;
+      setThoughts(prevThoughts => {
+        const newThoughts = { ...prevThoughts };
+        let dateToDelete: string | null = null;
+        
+        // Find and remove the thought, then renumber
+        Object.keys(newThoughts).forEach(date => {
+          const index = newThoughts[date].findIndex(t => t.id === id);
+          if (index !== -1) {
+            // Remove the thought
+            newThoughts[date].splice(index, 1);
+            
+            // Renumber the remaining thoughts
+            if (newThoughts[date].length > 0) {
+              assignThoughtNumbers(newThoughts[date]);
+            } else {
+              // If this date has no more thoughts, mark it for deletion
+              dateToDelete = date;
+            }
           }
+        });
+        
+        // Remove empty dates
+        if (dateToDelete) {
+          delete newThoughts[dateToDelete];
         }
+        
+        return newThoughts;
       });
-      
-      // Remove empty dates
-      if (dateToDelete) {
-        delete newThoughts[dateToDelete];
-      }
-      
-      setThoughts(newThoughts);
     } catch (err) {
       setError('Failed to delete thought');
       console.error(err);
@@ -332,19 +251,21 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
       
       // Update local state
-      const newThoughts = { ...thoughts };
-      
-      // Find and update the thought
-      Object.keys(newThoughts).forEach(date => {
-        const index = newThoughts[date].findIndex(t => t.id === id);
-        if (index !== -1) {
-          const thought = newThoughts[date][index] as ThoughtWithNumber;
-          thought.hidden = newHiddenState;
-          thought.updated_at = new Date().toISOString();
-        }
+      setThoughts(prevThoughts => {
+        const newThoughts = { ...prevThoughts };
+        
+        // Find and update the thought
+        Object.keys(newThoughts).forEach(date => {
+          const index = newThoughts[date].findIndex(t => t.id === id);
+          if (index !== -1) {
+            const thought = newThoughts[date][index] as ThoughtWithNumber;
+            thought.hidden = newHiddenState;
+            thought.updated_at = new Date().toISOString();
+          }
+        });
+        
+        return newThoughts;
       });
-      
-      setThoughts(newThoughts);
     } catch (err) {
       setError('Failed to toggle thought visibility');
       console.error(err);
