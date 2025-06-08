@@ -67,7 +67,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
                   className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
                     hideHiddenThoughts
                       ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-orange-500 hover:text-orange-600 hover:bg-orange-50'
                   }`}
                   title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
                 >
