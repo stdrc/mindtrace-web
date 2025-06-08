@@ -56,6 +56,11 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
                 </button>
               )}
               <div className="flex-shrink-0 flex items-center">
+                <img 
+                  src="/logo.png" 
+                  alt="MindTrace Logo" 
+                  className="w-8 h-8 mr-3 rounded-full"
+                />
                 <h1 className="text-2xl diary-title">MindTrace</h1>
               </div>
             </div>

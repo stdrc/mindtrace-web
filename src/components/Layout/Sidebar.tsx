@@ -54,7 +54,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         md:flex-shrink-0
       `}>
         <div className="h-full flex flex-col">
-          {/* Mobile header */}
+                    {/* Mobile header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200 md:hidden">
             <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
             <button
