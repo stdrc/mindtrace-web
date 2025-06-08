@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
@@ -9,6 +9,24 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // 防止移动端侧边栏打开时的背景滚动
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    
+    if (isMobile && isSidebarOpen) {
+      // 简单的滚动锁定
+      document.body.style.overflow = 'hidden';
+    } else {
+      // 恢复滚动
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      // 清理函数：确保在组件卸载时恢复滚动
+      document.body.style.overflow = '';
+    };
+  }, [isSidebarOpen]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
