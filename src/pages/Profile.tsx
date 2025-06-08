@@ -50,7 +50,7 @@ export default function ProfilePage() {
     try {
       await updateProfile(birthDate || null);
       setIsEditing(false);
-    } catch (err) {
+    } catch {
       // Error is handled by context
     } finally {
       setIsSaving(false);
@@ -70,11 +70,11 @@ export default function ProfilePage() {
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="space-y-6">
         <div className="diary-card p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h1 className="diary-title text-2xl mb-2">Profile Settings</h1>
+              <h1 className="diary-title text-2xl mb-2">Profile</h1>
               <p className="diary-text text-sm opacity-75">
                 Manage your personal information and preferences
               </p>
@@ -196,16 +196,6 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="diary-card p-4">
-          <Button
-            variant="secondary"
-            onClick={() => navigate('/')}
-            className="w-full sm:w-auto"
-          >
-            ← Back to Thoughts
-          </Button>
-        </div>
       </div>
     </Layout>
   );

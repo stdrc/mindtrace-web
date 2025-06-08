@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useHiddenToggleContext } from '../../contexts/HiddenToggleContext';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import Icon from '../UI/Icon';
 
-export default function Header() {
+interface HeaderProps {
+  onToggleSidebar: () => void;
+}
+
+export default function Header({ onToggleSidebar }: HeaderProps) {
   const { user } = useAuth();
   const { hideHiddenThoughts, toggleHiddenVisibility } = useHiddenToggleContext();
-  const navigate = useNavigate();
   const location = useLocation();
   const [isShowHiddenModalOpen, setIsShowHiddenModalOpen] = useState(false);
 
@@ -40,36 +43,33 @@ export default function Header() {
       <header className="diary-header fixed-header">
         <div className="app-container">
           <div className="flex justify-between h-16 items-center px-3 sm:px-6 md:px-8">
-            <div className="flex-shrink-0 flex items-center">
-              <h1 className="text-2xl diary-title">MindTrace</h1>
+            <div className="flex items-center space-x-4">
+              {user && (
+                <button
+                  onClick={onToggleSidebar}
+                  className="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 md:hidden"
+                  title="Toggle menu"
+                >
+                  <Icon name="menu" className="w-5 h-5" />
+                </button>
+              )}
+              <div className="flex-shrink-0 flex items-center">
+                <h1 className="text-2xl diary-title">MindTrace</h1>
+              </div>
             </div>
             
-            {user && (
-              <div className="flex items-center space-x-4">
-                {!isProfilePage && (
-                  <button
-                    onClick={handleEyeButtonClick}
-                    className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                      hideHiddenThoughts
-                        ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                    }`}
-                    title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
-                  >
-                    <Icon name={hideHiddenThoughts ? 'lock' : 'unlock'} />
-                  </button>
-                )}
-                
-                {/* Profile link - text on desktop, icon on mobile */}
-                <button
-                  onClick={() => navigate('/profile')}
-                  className="flex items-center text-sm diary-text hover:text-gray-900 transition-colors"
-                  title="Profile"
-                >
-                  <span className="hidden sm:inline">Profile</span>
-                  <Icon name="user" className="w-4 h-4 sm:hidden" />
-                </button>
-              </div>
+            {user && !isProfilePage && (
+              <button
+                onClick={handleEyeButtonClick}
+                className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  hideHiddenThoughts
+                    ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+                title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
+              >
+                <Icon name={hideHiddenThoughts ? 'lock' : 'unlock'} />
+              </button>
             )}
           </div>
         </div>
