@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useThoughts } from '../../contexts/ThoughtContext';
 import DateSelector from '../UI/DateSelector';
 import { getTodayDateString } from '../../utils/dateUtils';
@@ -9,6 +9,7 @@ export default function ThoughtInput() {
   const [content, setContent] = useState('');
   const [date, setDate] = useState(getTodayDateString());
   const [isHidden, setIsHidden] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   // Focus the input when the component mounts
@@ -26,22 +27,28 @@ export default function ThoughtInput() {
     }
   };
 
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     
-    if (!content.trim()) return;
+    if (!content.trim() || isSubmitting) return;
     
-    await addThought(content.trim(), date, isHidden);
-    setContent('');
+    setIsSubmitting(true);
     
-    // Reset textarea height after clearing content
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.style.height = 'auto';
-        inputRef.current.focus();
-      }
-    }, 0);
-  };
+    try {
+      await addThought(content.trim(), date, isHidden);
+      setContent('');
+      
+      // Reset textarea height after clearing content
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.style.height = 'auto';
+          inputRef.current.focus();
+        }
+      }, 0);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [content, date, isHidden, isSubmitting, addThought]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // Submit on Enter (without Shift)
@@ -86,9 +93,12 @@ export default function ThoughtInput() {
           value={content}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          className="input diary-text resize-none overflow-hidden"
+          disabled={isSubmitting}
+          className={`input diary-text resize-none overflow-hidden ${
+            isSubmitting ? 'opacity-60 cursor-not-allowed' : ''
+          }`}
           style={{ minHeight: '60px', maxHeight: '200px' }}
-          placeholder="What's in your mind now?"
+          placeholder={isSubmitting ? "Saving..." : "What's in your mind now?"}
           autoComplete="off"
           rows={1}
         />

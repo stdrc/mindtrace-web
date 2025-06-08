@@ -185,6 +185,13 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
           newThoughts[date] = [];
         }
         
+        // Check if this thought already exists (防止重复添加)
+        const exists = newThoughts[date].some(thought => thought.id === data.id);
+        if (exists) {
+          console.log('Thought already exists, skipping duplicate add');
+          return prevThoughts;
+        }
+        
         const thoughtWithNumber: ThoughtWithNumber = {
           ...data,
           number: 1 // Will be recalculated after sorting
