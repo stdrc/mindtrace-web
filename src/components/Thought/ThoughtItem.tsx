@@ -2,9 +2,9 @@ import { useState } from 'react';
 import type { ThoughtWithNumber } from '../../types/thought';
 import { useThoughts } from '../../contexts/ThoughtContext';
 import { useHiddenToggleContext } from '../../contexts/HiddenToggleContext';
-import { useThoughtOperations } from '../../hooks/useThoughtOperations';
-import Button from '../UI/Button';
-import Modal from '../UI/Modal';
+import { useAsyncOperation } from '../../hooks/useAsyncOperation';
+import ThoughtActions from './ThoughtActions';
+import ThoughtEditForm from './ThoughtEditForm';
 import Icon from '../UI/Icon';
 
 interface ThoughtItemProps {
@@ -14,98 +14,34 @@ interface ThoughtItemProps {
 export default function ThoughtItem({ thought }: ThoughtItemProps) {
   const { updateThought, deleteThought, toggleThoughtHidden } = useThoughts();
   const { hideHiddenThoughts } = useHiddenToggleContext();
-  const { operationStates, setOperationLoading } = useThoughtOperations();
   
   const [isEditing, setIsEditing] = useState(false);
-  const [editContent, setEditContent] = useState(thought.content);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isToggleHiddenModalOpen, setIsToggleHiddenModalOpen] = useState(false);
+  
+  const updateOperation = useAsyncOperation(updateThought);
+  const deleteOperation = useAsyncOperation(deleteThought);
+  const toggleHiddenOperation = useAsyncOperation(toggleThoughtHidden);
 
   const handleEdit = () => {
-    setEditContent(thought.content);
     setIsEditing(true);
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    setEditContent(thought.content);
   };
 
-  const handleSaveEdit = async () => {
-    if (!editContent.trim()) return;
-    
-    setOperationLoading('update', true);
-    try {
-      await updateThought(thought.id, editContent.trim());
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Failed to update thought:', error);
-    } finally {
-      setOperationLoading('update', false);
-    }
+  const handleSaveEdit = async (id: string, content: string) => {
+    await updateOperation.execute(id, content);
+    setIsEditing(false);
   };
 
-  const handleDelete = async () => {
-    setOperationLoading('delete', true);
-    try {
-      await deleteThought(thought.id);
-      setIsDeleteModalOpen(false);
-    } catch (error) {
-      console.error('Failed to delete thought:', error);
-    } finally {
-      setOperationLoading('delete', false);
-    }
+  const handleDelete = async (id: string) => {
+    await deleteOperation.execute(id);
   };
 
-  const handleToggleHidden = async () => {
-    setOperationLoading('toggleHidden', true);
-    try {
-      await toggleThoughtHidden(thought.id);
-      setIsToggleHiddenModalOpen(false);
-    } catch (error) {
-      console.error('Failed to toggle thought visibility:', error);
-    } finally {
-      setOperationLoading('toggleHidden', false);
-    }
+  const handleToggleHidden = async (id: string) => {
+    await toggleHiddenOperation.execute(id);
   };
 
-  const renderModal = (
-    isOpen: boolean,
-    onClose: () => void,
-    title: string,
-    content: string,
-    onConfirm: () => void,
-    confirmText: string,
-    isLoading: boolean,
-    variant: 'danger' | 'primary' = 'primary'
-  ) => (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={title}
-      footer={
-        <>
-          <Button
-            variant="secondary"
-            onClick={onClose}
-            disabled={isLoading}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant={variant}
-            onClick={onConfirm}
-            isLoading={isLoading}
-            disabled={isLoading}
-          >
-            {confirmText}
-          </Button>
-        </>
-      }
-    >
-      <p className="diary-text selectable-text">{content}</p>
-    </Modal>
-  );
 
   return (
     <>
@@ -119,62 +55,25 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
               </div>
             )}
           </div>
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1">
-            <button
-              onClick={() => setIsToggleHiddenModalOpen(true)}
-              className={`${
-                thought.hidden 
-                  ? 'text-orange-500 hover:text-orange-600 hover:bg-orange-50' 
-                  : 'text-gray-500 hover:text-gray-600 hover:bg-gray-50'
-              } p-1 rounded-md transition-colors`}
-              title={thought.hidden ? "Unlock" : "Lock"}
-            >
-              <Icon name={thought.hidden ? 'unlock' : 'lock'} />
-            </button>
-            <button
-              onClick={handleEdit}
-              className="text-gray-600 hover:text-gray-700 p-1 rounded-md hover:bg-gray-50 transition-colors"
-              title="Edit"
-            >
-              <Icon name="edit" />
-            </button>
-            <button
-              onClick={() => setIsDeleteModalOpen(true)}
-              className="text-red-500 hover:text-red-600 p-1 rounded-md hover:bg-red-50 transition-colors"
-              title="Delete"
-            >
-              <Icon name="delete" />
-            </button>
-          </div>
+          <ThoughtActions
+            thought={thought}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onToggleHidden={handleToggleHidden}
+            operationStates={{
+              delete: deleteOperation.loading,
+              toggleHidden: toggleHiddenOperation.loading
+            }}
+          />
         </div>
         
         {isEditing ? (
-          <div className="mt-3">
-            <textarea
-              value={editContent}
-              onChange={(e) => setEditContent(e.target.value)}
-              className="input diary-text min-h-[80px]"
-              autoFocus
-            />
-            <div className="flex justify-end space-x-2 mt-2 sm:mt-3">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={handleCancelEdit}
-                disabled={operationStates.update}
-              >
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                onClick={handleSaveEdit}
-                isLoading={operationStates.update}
-                disabled={operationStates.update}
-              >
-                Save
-              </Button>
-            </div>
-          </div>
+          <ThoughtEditForm
+            thought={thought}
+            onSave={handleSaveEdit}
+            onCancel={handleCancelEdit}
+            isLoading={updateOperation.loading}
+          />
         ) : (
           <div className="mt-1.5 sm:mt-3">
             {thought.hidden && hideHiddenThoughts ? (
@@ -188,28 +87,6 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
         )}
       </div>
 
-      {renderModal(
-        isDeleteModalOpen,
-        () => setIsDeleteModalOpen(false),
-        "Delete Thought",
-        "Are you sure you want to delete this thought? This action cannot be undone.",
-        handleDelete,
-        "Delete",
-        operationStates.delete,
-        'danger'
-      )}
-
-      {renderModal(
-        isToggleHiddenModalOpen,
-        () => setIsToggleHiddenModalOpen(false),
-        thought.hidden ? "Unlock Thought" : "Lock Thought",
-        thought.hidden 
-          ? "Are you sure you want to unlock this thought? It will be visible again."
-          : "Are you sure you want to lock this thought? It will be hidden from the main view.",
-        handleToggleHidden,
-        thought.hidden ? "Unlock" : "Lock",
-        operationStates.toggleHidden
-      )}
     </>
   );
 } 
