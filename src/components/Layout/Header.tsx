@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useHiddenToggleContext } from '../../contexts/HiddenToggleContext';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
+import ExportModal from '../UI/ExportModal';
 import Icon from '../UI/Icon';
 
 interface HeaderProps {
@@ -15,6 +16,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
   const { hideHiddenThoughts, toggleHiddenVisibility } = useHiddenToggleContext();
   const location = useLocation();
   const [isShowHiddenModalOpen, setIsShowHiddenModalOpen] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   // Don't show lock button on profile page
   const isProfilePage = location.pathname === '/profile';
@@ -59,17 +61,27 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
             </div>
             
             {user && !isProfilePage && (
-              <button
-                onClick={handleEyeButtonClick}
-                className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  hideHiddenThoughts
-                    ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                }`}
-                title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
-              >
-                <Icon name={hideHiddenThoughts ? 'lock' : 'unlock'} />
-              </button>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={handleEyeButtonClick}
+                  className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    hideHiddenThoughts
+                      ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
+                >
+                  <Icon name={hideHiddenThoughts ? 'lock' : 'unlock'} />
+                </button>
+                
+                <button
+                  onClick={() => setIsExportModalOpen(true)}
+                  className="p-2 rounded-full text-sm font-medium transition-all duration-200 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  title="Export thoughts"
+                >
+                  <Icon name="archive" />
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -99,6 +111,11 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           Are you sure you want to show hidden content?
         </p>
       </Modal>
+
+      <ExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+      />
     </>
   );
 } 
