@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Button from '../UI/Button';
 import type { ThoughtWithNumber } from '../../types/thought';
 
@@ -16,6 +16,24 @@ export default function ThoughtEditForm({
   isLoading
 }: ThoughtEditFormProps) {
   const [editContent, setEditContent] = useState(thought.content);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize textarea based on content
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + 'px';
+    }
+  };
+
+  // Adjust height when component mounts and content changes
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [editContent]);
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, []);
 
   const handleSave = async () => {
     if (editContent.trim() === thought.content.trim()) {
@@ -31,12 +49,19 @@ export default function ThoughtEditForm({
     onCancel();
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditContent(e.target.value);
+    adjustTextareaHeight();
+  };
+
   return (
     <div className="mt-3">
       <textarea
+        ref={textareaRef}
         value={editContent}
-        onChange={(e) => setEditContent(e.target.value)}
-        className="input diary-text min-h-[80px]"
+        onChange={handleChange}
+        className="input diary-text resize-none overflow-y-auto"
+        style={{ minHeight: '60px', maxHeight: '200px' }}
         autoFocus
         disabled={isLoading}
       />

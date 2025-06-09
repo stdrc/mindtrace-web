@@ -65,13 +65,13 @@ export default function ThoughtList() {
                   if (lifeDays) {
                     return (
                       <>
-                        <span className="selectable-text">{lifeDays}</span>
-                        <span className="mx-1" style={{ userSelect: 'none' }}>·</span>
-                        <span className="selectable-text">{calendarDate}</span>
+                        <span>{lifeDays}</span>
+                        <span className="mx-1">·</span>
+                        <span>{calendarDate}</span>
                       </>
                     );
                   } else {
-                    return <span className="selectable-text">{calendarDate}</span>;
+                    return <span>{calendarDate}</span>;
                   }
                 })()}
               </span>

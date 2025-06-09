@@ -45,10 +45,10 @@ export default function DateSelector({ onDateSelect }: DateSelectorProps) {
         <button
           type="button"
           onClick={() => handleOptionClick('today')}
-          className={`w-8 h-8 min-w-8 rounded-full text-sm font-medium transition-all duration-200 flex items-center justify-center border ${
+          className={`w-10 h-10 min-w-10 rounded-full text-sm font-medium transition-all duration-150 flex items-center justify-center ${
             selectedOption === 'today'
-              ? 'bg-gray-900 text-white shadow-md border-gray-900'
-              : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+              ? 'bg-gray-900 text-white'
+              : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
           }`}
         >
           T
@@ -57,10 +57,10 @@ export default function DateSelector({ onDateSelect }: DateSelectorProps) {
         <button
           type="button"
           onClick={() => handleOptionClick('yesterday')}
-          className={`px-3 py-2 h-8 min-w-8 rounded-full text-sm font-medium transition-all duration-200 flex items-center justify-center border ${
+          className={`px-4 py-2 h-10 min-w-10 rounded-full text-sm font-medium transition-all duration-150 flex items-center justify-center ${
             selectedOption === 'yesterday'
-              ? 'bg-gray-900 text-white shadow-md border-gray-900'
-              : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+              ? 'bg-gray-900 text-white'
+              : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
           }`}
         >
           T-1
@@ -69,10 +69,10 @@ export default function DateSelector({ onDateSelect }: DateSelectorProps) {
         <button
           type="button"
           onClick={() => handleOptionClick('custom')}
-          className={`px-3 py-2 h-8 min-w-8 rounded-full text-sm font-medium transition-all duration-200 flex items-center justify-center border ${
+          className={`px-4 py-2 h-10 min-w-10 rounded-full text-sm font-medium transition-all duration-150 flex items-center justify-center ${
             selectedOption === 'custom'
-              ? 'bg-gray-900 text-white shadow-md border-gray-900'
-              : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+              ? 'bg-gray-900 text-white'
+              : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
           }`}
         >
           {getCustomButtonText()}

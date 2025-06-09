@@ -60,7 +60,7 @@ export default function ThoughtActions({
       <div className="relative">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-50 transition-colors"
+          className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-200 transition-all duration-150"
           title="More options"
         >
           <Icon name="more-vertical" />
@@ -72,10 +72,10 @@ export default function ThoughtActions({
               className="fixed inset-0 z-10" 
               onClick={() => setIsMenuOpen(false)}
             />
-            <div className="absolute right-0 top-8 z-20 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+            <div className="absolute right-0 top-10 z-20 w-48 bg-white rounded-2xl shadow-lg py-2">
               <button
                 onClick={handleEdit}
-                className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-3"
+                className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors duration-150"
               >
                 <Icon name="edit" className="w-4 h-4" />
                 <span>Edit</span>
@@ -83,7 +83,7 @@ export default function ThoughtActions({
               
               <button
                 onClick={handleToggleHiddenClick}
-                className={`w-full px-4 py-2 text-left flex items-center space-x-3 ${
+                className={`w-full px-4 py-3 text-left flex items-center space-x-3 transition-colors duration-150 ${
                   thought.hidden 
                     ? 'text-orange-600 hover:bg-orange-50' 
                     : 'text-gray-700 hover:bg-gray-50'
@@ -96,7 +96,7 @@ export default function ThoughtActions({
               
               <button
                 onClick={handleDeleteClick}
-                className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center space-x-3"
+                className="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50 flex items-center space-x-3 transition-colors duration-150"
                 disabled={operationStates.delete}
               >
                 <Icon name="delete" className="w-4 h-4" />

@@ -93,7 +93,7 @@ export default function ProfilePage() {
               <label className="block diary-text text-sm font-medium mb-2">
                 Email
               </label>
-              <div className="input bg-gray-50 cursor-not-allowed">
+              <div className="input bg-gray-50 cursor-not-allowed select-none">
                 {user.email}
               </div>
               <p className="diary-text text-xs opacity-60 mt-1">

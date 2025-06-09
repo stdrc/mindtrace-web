@@ -63,7 +63,7 @@ export default function Modal({ isOpen, onClose, title, children, footer }: Moda
         className="diary-card max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl"
       >
         <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
-          <h2 className="diary-title text-lg selectable-text">{title}</h2>
+          <h2 className="diary-title text-lg select-none">{title}</h2>
           <button
             onClick={onClose}
             className="text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded-full p-1 transition-colors"
