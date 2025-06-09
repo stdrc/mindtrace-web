@@ -33,16 +33,16 @@ export default function Login() {
             <div className="app-container">
               <div className="diary-card p-6 sm:p-8 w-full max-w-lg mx-auto">
                 <div className="text-center mb-8">
-                  <div className="mb-4">
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center">
+                  <div className="mb-1">
+                    <div className="w-20 h-20 mx-auto mb-2 flex items-center justify-center">
                       <img 
-                        src="/logo.png" 
+                        src="/logo-transparent.svg" 
                         alt="MindTrace Logo" 
-                        className="w-14 h-14 rounded-full"
+                        className="w-18 h-18"
                       />
                     </div>
                   </div>
-                  <h1 className="diary-title text-3xl mb-2">MindTrace</h1>
+                  <h1 className="website-title text-3xl mb-2">MindTrace</h1>
                 </div>
 
                 {error && (

@@ -65,14 +65,14 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
               )}
               <button 
                 onClick={handleLogoClick}
-                className="flex-shrink-0 flex items-center hover:opacity-80 transition-opacity"
+                className="flex-shrink-0 flex items-center"
               >
                 <img 
-                  src="/logo.png" 
+                  src="/logo-transparent.svg" 
                   alt="MindTrace Logo" 
-                  className="w-8 h-8 mr-3 rounded-full"
+                  className="w-9 h-9 mr-2"
                 />
-                <h1 className="text-2xl diary-title">MindTrace</h1>
+                <h1 className="text-2xl website-title">MindTrace</h1>
               </button>
             </div>
             

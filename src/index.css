@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -247,6 +249,14 @@
 
   .diary-title {
     @apply modern-title;
+  }
+
+  /* 网站标题样式 - 仅用于 MindTrace 品牌名 */
+  .website-title {
+    font-family: 'Caveat', cursive;
+    color: #374151;
+    font-weight: 500;
+    letter-spacing: 0.5px;
   }
 
   .diary-text {
