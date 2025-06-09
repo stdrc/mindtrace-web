@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useHiddenToggleContext } from '../../contexts/HiddenToggleContext';
+import { useThoughts } from '../../contexts/ThoughtContext';
+import { navigateToThoughtsAndRefresh } from '../../utils/navigationUtils';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import ExportModal from '../UI/ExportModal';
@@ -14,7 +16,9 @@ interface HeaderProps {
 export default function Header({ onToggleSidebar }: HeaderProps) {
   const { user } = useAuth();
   const { hideHiddenThoughts, toggleHiddenVisibility } = useHiddenToggleContext();
+  const { refreshThoughts } = useThoughts();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isShowHiddenModalOpen, setIsShowHiddenModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
@@ -40,6 +44,10 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
     setIsShowHiddenModalOpen(false);
   };
 
+  const handleLogoClick = () => {
+    navigateToThoughtsAndRefresh(navigate, refreshThoughts);
+  };
+
   return (
     <>
       <header className="diary-header fixed-header">
@@ -55,14 +63,17 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
                   <Icon name="menu" className="w-5 h-5" />
                 </button>
               )}
-              <div className="flex-shrink-0 flex items-center">
+              <button 
+                onClick={handleLogoClick}
+                className="flex-shrink-0 flex items-center hover:opacity-80 transition-opacity"
+              >
                 <img 
                   src="/logo.png" 
                   alt="MindTrace Logo" 
                   className="w-8 h-8 mr-3 rounded-full"
                 />
                 <h1 className="text-2xl diary-title">MindTrace</h1>
-              </div>
+              </button>
             </div>
             
             {user && !isProfilePage && (

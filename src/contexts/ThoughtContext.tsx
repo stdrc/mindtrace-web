@@ -14,6 +14,7 @@ interface ThoughtContextType {
   deleteThought: (id: string) => Promise<void>;
   toggleThoughtHidden: (id: string) => Promise<void>;
   loadMoreThoughts: () => Promise<void>;
+  refreshThoughts: () => Promise<void>;
   hasMore: boolean;
 }
 
@@ -190,6 +191,26 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const refreshThoughts = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const result = await thoughtService.loadInitialThoughts(user.id);
+      if (result) {
+        setThoughts(result.thoughts);
+        setHasMore(result.hasMore);
+        setLastLoadedDate(result.lastLoadedDate);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to refresh thoughts');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     thoughts,
     loading,
@@ -199,6 +220,7 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
     deleteThought,
     toggleThoughtHidden,
     loadMoreThoughts,
+    refreshThoughts,
     hasMore,
   };
 

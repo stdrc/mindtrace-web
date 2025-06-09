@@ -1,4 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useThoughts } from '../../contexts/ThoughtContext';
+import { navigateToThoughtsAndRefresh } from '../../utils/navigationUtils';
 import Icon from '../UI/Icon';
 
 interface SidebarProps {
@@ -9,6 +11,7 @@ interface SidebarProps {
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { refreshThoughts } = useThoughts();
 
   const menuItems = [
     {
@@ -26,10 +29,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   ];
 
   const handleNavigate = (path: string) => {
-    navigate(path);
-    // Close sidebar on mobile after navigation
+    // Close sidebar first
     if (window.innerWidth < 768) {
       onClose();
+    }
+    
+    if (path === '/') {
+      // Thoughts 页面：导航到首页并刷新数据
+      navigateToThoughtsAndRefresh(navigate, refreshThoughts);
+    } else {
+      // 其他页面直接导航
+      navigate(path);
     }
   };
 
