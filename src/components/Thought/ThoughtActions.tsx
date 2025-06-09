@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Icon from '../UI/Icon';
 import { useConfirmDialog } from '../../hooks/useConfirmDialog';
 import ConfirmDialog from '../UI/ConfirmDialog';
@@ -21,10 +22,12 @@ export default function ThoughtActions({
   onToggleHidden,
   operationStates
 }: ThoughtActionsProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const deleteDialog = useConfirmDialog();
   const toggleHiddenDialog = useConfirmDialog();
 
   const handleDeleteClick = () => {
+    setIsMenuOpen(false);
     deleteDialog.showDialog({
       title: "Delete Thought",
       content: "Are you sure you want to delete this thought? This action cannot be undone.",
@@ -35,6 +38,7 @@ export default function ThoughtActions({
   };
 
   const handleToggleHiddenClick = () => {
+    setIsMenuOpen(false);
     toggleHiddenDialog.showDialog({
       title: thought.hidden ? "Show Thought" : "Hide Thought",
       content: thought.hidden 
@@ -46,38 +50,61 @@ export default function ThoughtActions({
     });
   };
 
+  const handleEdit = () => {
+    setIsMenuOpen(false);
+    onEdit();
+  };
+
   return (
     <>
-      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1">
+      <div className="relative">
         <button
-          onClick={handleToggleHiddenClick}
-          className={`${
-            thought.hidden 
-              ? 'text-orange-500 hover:text-orange-600 hover:bg-orange-50' 
-              : 'text-gray-500 hover:text-gray-600 hover:bg-gray-50'
-          } p-1 rounded-md transition-colors`}
-          title={thought.hidden ? "Show" : "Hide"}
-          disabled={operationStates.toggleHidden}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-50 transition-colors"
+          title="More options"
         >
-          <Icon name={thought.hidden ? 'unlock' : 'lock'} />
+          <Icon name="more-vertical" />
         </button>
         
-        <button
-          onClick={onEdit}
-          className="text-gray-600 hover:text-gray-700 p-1 rounded-md hover:bg-gray-50 transition-colors"
-          title="Edit"
-        >
-          <Icon name="edit" />
-        </button>
-        
-        <button
-          onClick={handleDeleteClick}
-          className="text-red-500 hover:text-red-600 p-1 rounded-md hover:bg-red-50 transition-colors"
-          title="Delete"
-          disabled={operationStates.delete}
-        >
-          <Icon name="delete" />
-        </button>
+        {isMenuOpen && (
+          <>
+            <div 
+              className="fixed inset-0 z-10" 
+              onClick={() => setIsMenuOpen(false)}
+            />
+            <div className="absolute right-0 top-8 z-20 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+              <button
+                onClick={handleEdit}
+                className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-3"
+              >
+                <Icon name="edit" className="w-4 h-4" />
+                <span>Edit</span>
+              </button>
+              
+              <button
+                onClick={handleToggleHiddenClick}
+                className={`w-full px-4 py-2 text-left flex items-center space-x-3 ${
+                  thought.hidden 
+                    ? 'text-orange-600 hover:bg-orange-50' 
+                    : 'text-gray-700 hover:bg-gray-50'
+                }`}
+                disabled={operationStates.toggleHidden}
+              >
+                <Icon name={thought.hidden ? 'unlock' : 'lock'} className="w-4 h-4" />
+                <span>{thought.hidden ? 'Show' : 'Hide'}</span>
+              </button>
+              
+              <button
+                onClick={handleDeleteClick}
+                className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center space-x-3"
+                disabled={operationStates.delete}
+              >
+                <Icon name="delete" className="w-4 h-4" />
+                <span>Delete</span>
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       <ConfirmDialog
