@@ -62,7 +62,6 @@
   
   .btn-primary:hover {
     @apply bg-gray-700;
-    transform: translateY(-1px);
   }
   
   .btn-secondary {
@@ -71,7 +70,6 @@
   
   .btn-secondary:hover {
     @apply bg-gray-300;
-    transform: translateY(-1px);
   }
   
   .btn-danger {
@@ -80,7 +78,6 @@
   
   .btn-danger:hover {
     @apply bg-red-700;
-    transform: translateY(-1px);
   }
   
   /* Modal buttons without hover transform effect */

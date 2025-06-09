@@ -59,7 +59,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
             <button
               onClick={onClose}
-              className="p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+              className="p-2 rounded-md text-gray-400 active:bg-gray-100"
             >
               <Icon name="x" className="w-5 h-5" />
             </button>
@@ -79,7 +79,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         transition-colors duration-200
                         ${isActive
                           ? 'bg-gray-100 text-gray-900'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          : 'text-gray-600 active:bg-gray-100'
                         }
                       `}
                     >

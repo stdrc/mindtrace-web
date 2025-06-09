@@ -49,7 +49,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
               {user && (
                 <button
                   onClick={onToggleSidebar}
-                  className="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 md:hidden"
+                  className="p-2 rounded-md text-gray-500 md:hidden active:bg-gray-100"
                   title="Toggle menu"
                 >
                   <Icon name="menu" className="w-5 h-5" />
@@ -69,10 +69,10 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={handleEyeButtonClick}
-                  className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  className={`p-2 rounded-full text-sm font-medium transition-all duration-150 ${
                     hideHiddenThoughts
-                      ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                      : 'text-orange-500 hover:text-orange-600 hover:bg-orange-50'
+                      ? 'text-gray-400 active:bg-gray-100'
+                      : 'text-orange-500 active:bg-orange-100'
                   }`}
                   title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
                 >
@@ -81,7 +81,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
                 
                 <button
                   onClick={() => setIsExportModalOpen(true)}
-                  className="p-2 rounded-full text-sm font-medium transition-all duration-200 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  className="p-2 rounded-full text-sm font-medium transition-all duration-150 text-gray-700 active:bg-gray-100"
                   title="Export thoughts"
                 >
                   <Icon name="archive" />
