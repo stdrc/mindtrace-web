@@ -57,7 +57,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
               {user && (
                 <button
                   onClick={onToggleSidebar}
-                  className="p-2 rounded-md text-gray-500 md:hidden active:bg-gray-100"
+                  className="p-2 rounded-md text-gray-500 lg:hidden active:bg-gray-100"
                   title="Toggle menu"
                 >
                   <Icon name="menu" className="w-5 h-5" />

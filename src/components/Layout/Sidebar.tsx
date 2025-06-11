@@ -30,7 +30,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const handleNavigate = (path: string) => {
     // Close sidebar first
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 1024) {
       onClose();
     }
     
@@ -48,24 +48,24 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={onClose}
         />
       )}
       
       {/* Sidebar */}
       <div className={`
-        fixed md:static inset-y-0 left-0 z-50 md:z-auto
-        w-64 md:w-56 bg-white md:bg-transparent
-        transform ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        fixed lg:static inset-y-0 left-0 z-50 lg:z-auto
+        w-64 lg:w-56 bg-white lg:bg-transparent
+        transform ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         transition-transform duration-300 ease-in-out
-        md:transition-none md:transform-none
-        border-r border-gray-200 md:border-r-0
-        md:flex-shrink-0
+        lg:transition-none lg:transform-none
+        border-r border-gray-200 lg:border-r-0
+        lg:flex-shrink-0
       `}>
         <div className="h-full flex flex-col">
                     {/* Mobile header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 md:hidden">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:hidden">
             <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
             <button
               onClick={onClose}
@@ -76,7 +76,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </div>
 
           {/* Navigation items */}
-          <nav className="flex-1 px-4 py-4 md:px-0 md:py-0 md:pr-6">
+          <nav className="flex-1 px-4 py-4 lg:px-0 lg:py-0 lg:pr-6">
             <ul className="space-y-2">
               {menuItems.map((item) => {
                 const isActive = location.pathname === item.path;

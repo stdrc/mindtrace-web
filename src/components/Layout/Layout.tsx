@@ -12,7 +12,7 @@ export default function Layout({ children }: LayoutProps) {
 
   // 防止移动端侧边栏打开时的背景滚动
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
+    const isMobile = window.innerWidth < 1024;
     
     if (isMobile && isSidebarOpen) {
       // 简单的滚动锁定
