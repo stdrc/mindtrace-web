@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase';
 import type { ThoughtsByDate } from '../types/thought';
 import { processThoughts } from '../utils/thoughtUtils';
+import { getYesterdayDateString } from '../utils/dateUtils';
 import { PAGINATION, ERROR_MESSAGES } from '../constants';
 
 export interface ThoughtService {
@@ -18,6 +19,7 @@ export interface ThoughtService {
   updateThought: (userId: string, id: string, content: string) => Promise<void>;
   deleteThought: (userId: string, id: string) => Promise<void>;
   toggleThoughtHidden: (userId: string, id: string, currentHidden: boolean) => Promise<void>;
+  moveThoughtToYesterday: (userId: string, id: string) => Promise<void>;
 }
 
 export const thoughtService: ThoughtService = {
@@ -215,6 +217,24 @@ export const thoughtService: ThoughtService = {
     } catch (error) {
       console.error('Toggle thought hidden error:', error);
       throw new Error(ERROR_MESSAGES.TOGGLE_HIDDEN_FAILED);
+    }
+  },
+
+  async moveThoughtToYesterday(userId: string, id: string) {
+    try {
+      // Use the existing dateUtils function to get yesterday's date in local timezone
+      const yesterdayDateString = getYesterdayDateString();
+      
+      const { error } = await supabase
+        .from('thoughts')
+        .update({ date: yesterdayDateString, updated_at: new Date().toISOString() })
+        .eq('id', id)
+        .eq('user_id', userId);
+      
+      if (error) throw error;
+    } catch (error) {
+      console.error('Move thought to yesterday error:', error);
+      throw new Error('Failed to move thought to yesterday');
     }
   }
 };

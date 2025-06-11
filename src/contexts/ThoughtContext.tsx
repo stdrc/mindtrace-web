@@ -13,6 +13,7 @@ interface ThoughtContextType {
   updateThought: (id: string, content: string) => Promise<void>;
   deleteThought: (id: string) => Promise<void>;
   toggleThoughtHidden: (id: string) => Promise<void>;
+  moveThoughtToYesterday: (id: string) => Promise<void>;
   loadMoreThoughts: () => Promise<void>;
   refreshThoughts: () => Promise<void>;
   hasMore: boolean;
@@ -191,6 +192,21 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const moveThoughtToYesterday = async (id: string) => {
+    if (!user) return;
+    
+    try {
+      await thoughtService.moveThoughtToYesterday(user.id, id);
+      // Remove thought from current state since it moved to a different date
+      deleteThoughtFromState(id);
+      // Refresh the list to show updated data (in case yesterday's date is visible)
+      await refreshThoughts();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to move thought to yesterday');
+      throw err;
+    }
+  };
+
   const refreshThoughts = async () => {
     if (!user) return;
     
@@ -219,6 +235,7 @@ export function ThoughtProvider({ children }: { children: ReactNode }) {
     updateThought,
     deleteThought,
     toggleThoughtHidden,
+    moveThoughtToYesterday,
     loadMoreThoughts,
     refreshThoughts,
     hasMore,

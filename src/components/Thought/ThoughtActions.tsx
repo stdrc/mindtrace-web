@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Icon from '../UI/Icon';
 import { useConfirmDialog } from '../../hooks/useConfirmDialog';
 import ConfirmDialog from '../UI/ConfirmDialog';
+import { getTodayDateString } from '../../utils/dateUtils';
 import type { ThoughtWithNumber } from '../../types/thought';
 
 interface ThoughtActionsProps {
@@ -9,9 +10,11 @@ interface ThoughtActionsProps {
   onEdit: () => void;
   onDelete: (id: string) => Promise<void>;
   onToggleHidden: (id: string) => Promise<void>;
+  onMoveToYesterday: (id: string) => Promise<void>;
   operationStates: {
     delete: boolean;
     toggleHidden: boolean;
+    moveToYesterday: boolean;
   };
 }
 
@@ -20,11 +23,16 @@ export default function ThoughtActions({
   onEdit,
   onDelete,
   onToggleHidden,
+  onMoveToYesterday,
   operationStates
 }: ThoughtActionsProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const deleteDialog = useConfirmDialog();
   const toggleHiddenDialog = useConfirmDialog();
+  const moveToYesterdayDialog = useConfirmDialog();
+  
+  // Check if this thought is from today
+  const isToday = thought.date === getTodayDateString();
 
   const handleDeleteClick = () => {
     setIsMenuOpen(false);
@@ -55,6 +63,17 @@ export default function ThoughtActions({
     onEdit();
   };
 
+  const handleMoveToYesterdayClick = () => {
+    setIsMenuOpen(false);
+    moveToYesterdayDialog.showDialog({
+      title: "Move to Yesterday",
+      content: "Are you sure you want to move this thought to yesterday's date?",
+      confirmText: "Move",
+      variant: 'primary',
+      onConfirm: () => onMoveToYesterday(thought.id)
+    });
+  };
+
   return (
     <>
       <div className="relative">
@@ -80,6 +99,17 @@ export default function ThoughtActions({
                 <Icon name="edit" className="w-4 h-4" />
                 <span>Edit</span>
               </button>
+              
+              {isToday && (
+                <button
+                  onClick={handleMoveToYesterdayClick}
+                  className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors duration-150"
+                  disabled={operationStates.moveToYesterday}
+                >
+                  <Icon name="calendar" className="w-4 h-4" />
+                  <span>Move to yesterday</span>
+                </button>
+              )}
               
               <button
                 onClick={handleToggleHiddenClick}
@@ -121,6 +151,14 @@ export default function ThoughtActions({
         config={toggleHiddenDialog.config}
         isConfirming={toggleHiddenDialog.isConfirming || operationStates.toggleHidden}
         onConfirm={toggleHiddenDialog.handleConfirm}
+      />
+
+      <ConfirmDialog
+        isOpen={moveToYesterdayDialog.isOpen}
+        onClose={moveToYesterdayDialog.handleCancel}
+        config={moveToYesterdayDialog.config}
+        isConfirming={moveToYesterdayDialog.isConfirming || operationStates.moveToYesterday}
+        onConfirm={moveToYesterdayDialog.handleConfirm}
       />
     </>
   );

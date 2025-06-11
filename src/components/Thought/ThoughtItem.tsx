@@ -12,7 +12,7 @@ interface ThoughtItemProps {
 }
 
 export default function ThoughtItem({ thought }: ThoughtItemProps) {
-  const { updateThought, deleteThought, toggleThoughtHidden } = useThoughts();
+  const { updateThought, deleteThought, toggleThoughtHidden, moveThoughtToYesterday } = useThoughts();
   const { hideHiddenThoughts } = useHiddenToggleContext();
   
   const [isEditing, setIsEditing] = useState(false);
@@ -20,6 +20,7 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
   const updateOperation = useAsyncOperation(updateThought);
   const deleteOperation = useAsyncOperation(deleteThought);
   const toggleHiddenOperation = useAsyncOperation(toggleThoughtHidden);
+  const moveToYesterdayOperation = useAsyncOperation(moveThoughtToYesterday);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -42,6 +43,10 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
     await toggleHiddenOperation.execute(id);
   };
 
+  const handleMoveToYesterday = async (id: string) => {
+    await moveToYesterdayOperation.execute(id);
+  };
+
 
   return (
     <>
@@ -60,9 +65,11 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
             onEdit={handleEdit}
             onDelete={handleDelete}
             onToggleHidden={handleToggleHidden}
+            onMoveToYesterday={handleMoveToYesterday}
             operationStates={{
               delete: deleteOperation.loading,
-              toggleHidden: toggleHiddenOperation.loading
+              toggleHidden: toggleHiddenOperation.loading,
+              moveToYesterday: moveToYesterdayOperation.loading
             }}
           />
         </div>
