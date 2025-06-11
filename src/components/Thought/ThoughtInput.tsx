@@ -12,12 +12,6 @@ export default function ThoughtInput() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Focus the input when the component mounts
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
 
   // Auto-resize textarea based on content
   const adjustTextareaHeight = () => {
@@ -42,7 +36,6 @@ export default function ThoughtInput() {
       setTimeout(() => {
         if (inputRef.current) {
           inputRef.current.style.height = 'auto';
-          inputRef.current.focus();
         }
       }, 0);
     } finally {
