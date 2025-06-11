@@ -91,45 +91,45 @@ export default function ThoughtActions({
               className="fixed inset-0 z-10" 
               onClick={() => setIsMenuOpen(false)}
             />
-            <div className="absolute right-0 top-10 z-20 w-48 bg-white rounded-2xl shadow-lg py-2">
+            <div className="absolute right-0 top-10 z-20 w-44 bg-white rounded-xl shadow-lg overflow-hidden">
               <button
                 onClick={handleEdit}
-                className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors duration-150"
+                className="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-2 transition-colors duration-150 text-sm first:rounded-t-xl"
               >
-                <Icon name="edit" className="w-4 h-4" />
+                <Icon name="edit" className="w-3.5 h-3.5" />
                 <span>Edit</span>
               </button>
               
               {isToday && (
                 <button
                   onClick={handleMoveToYesterdayClick}
-                  className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors duration-150"
+                  className="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-2 transition-colors duration-150 text-sm"
                   disabled={operationStates.moveToYesterday}
                 >
-                  <Icon name="calendar" className="w-4 h-4" />
-                  <span>Move to yesterday</span>
+                  <Icon name="calendar" className="w-3.5 h-3.5" />
+                  <span>Move to Yesterday</span>
                 </button>
               )}
               
               <button
                 onClick={handleToggleHiddenClick}
-                className={`w-full px-4 py-3 text-left flex items-center space-x-3 transition-colors duration-150 ${
+                className={`w-full px-3 py-2 text-left flex items-center space-x-2 transition-colors duration-150 text-sm ${
                   thought.hidden 
                     ? 'text-orange-600 hover:bg-orange-50' 
                     : 'text-gray-700 hover:bg-gray-50'
-                }`}
+                } ${!isToday ? 'last:rounded-b-xl' : ''}`}
                 disabled={operationStates.toggleHidden}
               >
-                <Icon name={thought.hidden ? 'unlock' : 'lock'} className="w-4 h-4" />
+                <Icon name={thought.hidden ? 'unlock' : 'lock'} className="w-3.5 h-3.5" />
                 <span>{thought.hidden ? 'Show' : 'Hide'}</span>
               </button>
               
               <button
                 onClick={handleDeleteClick}
-                className="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50 flex items-center space-x-3 transition-colors duration-150"
+                className="w-full px-3 py-2 text-left text-red-600 hover:bg-red-50 flex items-center space-x-2 transition-colors duration-150 text-sm last:rounded-b-xl"
                 disabled={operationStates.delete}
               >
-                <Icon name="delete" className="w-4 h-4" />
+                <Icon name="delete" className="w-3.5 h-3.5" />
                 <span>Delete</span>
               </button>
             </div>
