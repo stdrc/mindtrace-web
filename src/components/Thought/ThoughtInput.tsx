@@ -10,6 +10,7 @@ export default function ThoughtInput() {
   const [date, setDate] = useState(getTodayDateString());
   const [isHidden, setIsHidden] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isComposing, setIsComposing] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
 
@@ -44,11 +45,19 @@ export default function ThoughtInput() {
   }, [content, date, isHidden, isSubmitting, addThought]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Submit on Enter (without Shift)
-    if (e.key === 'Enter' && !e.shiftKey) {
+    // Submit on Enter (without Shift), but not during composition (Chinese input)
+    if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
       e.preventDefault();
       handleSubmit();
     }
+  };
+
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -86,6 +95,8 @@ export default function ThoughtInput() {
           value={content}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
           disabled={isSubmitting}
           className={`input diary-text resize-none overflow-y-auto ${
             isSubmitting ? 'opacity-60 cursor-not-allowed' : ''
