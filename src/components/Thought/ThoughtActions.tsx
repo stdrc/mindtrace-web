@@ -79,7 +79,7 @@ export default function ThoughtActions({
       <div className="relative">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-200 transition-all duration-150"
+          className="text-subtle hover:text-muted p-2 rounded-full hover:bg-interactive-hover transition-all duration-150"
           title="More options"
         >
           <Icon name="more-vertical" />
@@ -94,7 +94,7 @@ export default function ThoughtActions({
             <div className="absolute right-0 top-10 z-20 w-48 bg-white rounded-xl shadow-lg overflow-hidden">
               <button
                 onClick={handleEdit}
-                className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-2 transition-colors duration-150 text-sm first:rounded-t-xl"
+                className="w-full px-4 py-3 text-left text-secondary hover:bg-interactive-hover flex items-center space-x-2 transition-colors duration-150 text-sm first:rounded-t-xl"
               >
                 <Icon name="edit" className="w-4 h-4" />
                 <span>Edit</span>
@@ -103,7 +103,7 @@ export default function ThoughtActions({
               {isToday && (
                 <button
                   onClick={handleMoveToYesterdayClick}
-                  className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center space-x-2 transition-colors duration-150 text-sm"
+                  className="w-full px-4 py-3 text-left text-secondary hover:bg-interactive-hover flex items-center space-x-2 transition-colors duration-150 text-sm"
                   disabled={operationStates.moveToYesterday}
                 >
                   <Icon name="calendar" className="w-4 h-4" />
@@ -115,8 +115,8 @@ export default function ThoughtActions({
                 onClick={handleToggleHiddenClick}
                 className={`w-full px-4 py-3 text-left flex items-center space-x-2 transition-colors duration-150 text-sm ${
                   thought.hidden 
-                    ? 'text-orange-600 hover:bg-orange-50' 
-                    : 'text-gray-700 hover:bg-gray-50'
+                    ? 'text-caution hover:bg-caution' 
+                    : 'text-secondary hover:bg-interactive-hover'
                 } ${!isToday ? 'last:rounded-b-xl' : ''}`}
                 disabled={operationStates.toggleHidden}
               >
@@ -126,7 +126,7 @@ export default function ThoughtActions({
               
               <button
                 onClick={handleDeleteClick}
-                className="w-full px-4 py-3 text-left text-red-600 hover:bg-red-50 flex items-center space-x-2 transition-colors duration-150 text-sm last:rounded-b-xl"
+                className="w-full px-4 py-3 text-left text-danger hover:bg-danger flex items-center space-x-2 transition-colors duration-150 text-sm last:rounded-b-xl"
                 disabled={operationStates.delete}
               >
                 <Icon name="delete" className="w-4 h-4" />

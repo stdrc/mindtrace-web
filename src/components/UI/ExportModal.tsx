@@ -226,7 +226,7 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
                 disabled={copyStatus === 'copying'}
                 className={`flex items-center space-x-2 ${
                   copyStatus === 'success' ? 'bg-green-50 border-green-200 text-green-700' :
-                  copyStatus === 'error' ? 'bg-red-50 border-red-200 text-red-700' : ''
+                  copyStatus === 'error' ? 'bg-danger border-danger text-danger' : ''
                 }`}
               >
                 <Icon name="copy" className="w-4 h-4" />
@@ -276,13 +276,13 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
         <div className="space-y-4">
           <div>
             <h3 className="diary-text font-medium mb-2">Export Preview</h3>
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 max-h-64 overflow-y-auto">
+            <div className="bg-interactive border border-medium rounded-lg p-4 max-h-64 overflow-y-auto">
               <pre className="diary-text text-sm whitespace-pre-wrap font-mono">
                 {previewContent}
               </pre>
               {exportedContent.length > 500 && (
                 <div className="mt-2 text-center">
-                  <span className="diary-text text-xs text-gray-500">
+                  <span className="diary-text text-xs text-muted">
                     ... and {Math.ceil((exportedContent.length - 500) / 100)} more lines
                   </span>
                 </div>

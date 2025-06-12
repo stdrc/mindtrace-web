@@ -5,16 +5,68 @@ MindTrace is a personal thought-recording application with a **modern minimalist
 
 ## Design Philosophy: Modern Minimalist Style
 
-### Color Palette
-- **Primary Background**: `#ffffff` (pure white)
-- **Secondary Background**: `#fafafa` (light gray)
-- **Card Background**: `#ffffff` (white)
-- **Primary Accent**: `#111827` (charcoal gray)
-- **Text Primary**: `#111827` (charcoal gray)
-- **Text Secondary**: `#374151` (medium gray)
-- **Text Muted**: `#6b7280` (light gray)
-- **Border Colors**: `#f3f4f6` (very light gray), `#e5e7eb` (light gray)
-- **Date Labels**: `#f9fafb` (very light gray background)
+### Semantic Color System
+
+The application uses a comprehensive CSS variable-based color system for consistency and maintainability. All colors are defined in `src/index.css` and used throughout the application via semantic utility classes.
+
+#### Core Color Variables
+```css
+/* Text Colors - Information Hierarchy */
+--color-text-primary: #111827      /* Main headings, critical text */
+--color-text-secondary: #374151    /* Body text, secondary content */
+--color-text-muted: #6b7280        /* Subtle text, form labels */
+--color-text-subtle: #9ca3af       /* Very light text, placeholders */
+
+/* State Colors - Semantic Actions */
+--color-caution: #ea580c           /* Unlock/warning states (orange) */
+--color-caution-bg: #fff7ed        /* Light orange backgrounds for caution states */
+--color-danger: #dc2626            /* Delete/error actions (red) */
+--color-danger-bg: #fef2f2         /* Light red backgrounds for errors */
+--color-danger-text: #b91c1c       /* Error message text */
+
+/* Interactive Colors - User Interface */
+--color-interactive-bg: #f5f5f5     /* Form inputs, inactive backgrounds */
+--color-interactive-hover: #f9f9f9   /* Hover state backgrounds */
+--color-interactive-active: #d4d4d4  /* Active/pressed states */
+
+/* Layout Colors - Structure */
+--color-bg-primary: #ffffff        /* Main page backgrounds */
+--color-bg-secondary: #fafafa      /* Secondary page areas */
+--color-bg-card: #ffffff           /* Card and panel backgrounds */
+--color-bg-overlay: rgba(0,0,0,0.5) /* Modal overlays */
+
+/* Border Colors - Visual Separation */
+--color-border-light: #f1f3f4      /* Subtle dividers */
+--color-border-medium: #e5e7eb     /* Standard borders */
+--color-border-strong: #d1d5db     /* Emphasized borders */
+--color-border-danger: #fecaca     /* Error state borders */
+```
+
+#### Semantic Usage Guidelines
+- **Orange (Caution)**: Reserved for unlock states and actions requiring user awareness
+- **Red (Danger)**: Used exclusively for destructive actions (delete) and error states
+- **Gray Hierarchy**: Follow the progression primary → secondary → muted → subtle for content importance
+- **Interactive Consistency**: All hover effects use consistent background brightness for unified feel
+
+#### Utility Classes
+```css
+/* Text Colors */
+.text-primary, .text-secondary, .text-muted, .text-subtle
+.text-caution, .text-danger
+
+/* Background Colors */
+.bg-interactive, .bg-interactive-hover, .bg-interactive-active
+.bg-caution, .bg-danger
+
+/* Border Colors */
+.border-light, .border-medium, .border-strong, .border-danger
+```
+
+#### Component Color Consistency Rules
+1. **Icon Buttons**: Default state has no background, hover shows `--color-interactive-hover`
+2. **Special State Buttons**: Unlock uses caution colors, delete uses danger colors
+3. **Error Messages**: Always use `bg-danger border-danger text-danger` combination
+4. **Form Elements**: Use `bg-interactive` with `hover:bg-interactive-hover`
 
 ### Typography
 - **Font Family**: System fonts (-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', etc.)

@@ -5,6 +5,51 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Semantic Color System */
+    --color-text-primary: #111827;
+    --color-text-secondary: #374151;
+    --color-text-muted: #6b7280;
+    --color-text-subtle: #9ca3af;
+    
+    /* State Colors */
+    --color-caution: #ea580c;
+    --color-caution-bg: #fff7ed;
+    --color-caution-subtle: #f97316;
+    
+    --color-danger: #dc2626;
+    --color-danger-bg: #fef2f2;
+    --color-danger-border: #fecaca;
+    --color-danger-text: #b91c1c;
+    
+    /* Neutral Colors */
+    --color-neutral-50: #fafafa;
+    --color-neutral-100: #f5f5f5;
+    --color-neutral-200: #e5e5e5;
+    --color-neutral-300: #d4d4d4;
+    --color-neutral-400: #a3a3a3;
+    --color-neutral-500: #737373;
+    --color-neutral-600: #525252;
+    --color-neutral-700: #404040;
+    --color-neutral-900: #171717;
+    
+    /* Interactive Colors */
+    --color-interactive-bg: #f5f5f5;
+    --color-interactive-hover: #f9f9f9;
+    --color-interactive-active: #d4d4d4;
+    
+    /* Background Colors */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #fafafa;
+    --color-bg-card: #ffffff;
+    --color-bg-overlay: rgba(0, 0, 0, 0.5);
+    
+    /* Border Colors */
+    --color-border-light: #f1f3f4;
+    --color-border-medium: #e5e7eb;
+    --color-border-strong: #d1d5db;
+  }
+
   html {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     height: 100%;
@@ -27,7 +72,7 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #ffffff; /* 纯白背景 */
+    background-color: var(--color-bg-primary);
   }
   
   #root {
@@ -35,7 +80,7 @@
     height: 100dvh; /* 动态视口高度，考虑iOS地址栏变化 */
     display: flex;
     flex-direction: column;
-    background-color: #ffffff;
+    background-color: var(--color-bg-primary);
   }
 }
 
@@ -85,10 +130,10 @@
   .input {
     @apply w-full rounded-xl transition-all duration-150;
     padding: 1rem;
-    background: #f5f5f5;
+    background: var(--color-interactive-bg);
     border: none;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    color: #111827;
+    color: var(--color-text-primary);
     /* 输入框内容应该可选中 */
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -104,12 +149,12 @@
   
   .input:focus {
     outline: none;
-    background: #f0f0f0;
+    background: var(--color-interactive-hover);
   }
   
   /* 现代简约卡片 */
   .modern-card {
-    background: #ffffff;
+    background: var(--color-bg-card);
     border: none;
     border-radius: 16px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
@@ -118,14 +163,14 @@
 
   /* 现代简约页眉 */
   .modern-header {
-    background: #ffffff;
-    border-bottom: 1px solid #f1f3f4;
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border-light);
     box-shadow: none;
     position: relative;
   }
   
   .modern-page {
-    background: #fafafa;
+    background: var(--color-bg-secondary);
     position: relative;
   }
   
@@ -208,22 +253,22 @@
   /* 现代简约标题样式 */
   .modern-title {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    color: #111827;
+    color: var(--color-text-primary);
     font-weight: 600;
   }
   
   /* 现代简约内容文本 */
   .modern-text {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    color: #374151;
+    color: var(--color-text-secondary);
     line-height: 1.6;
   }
   
   /* 日期标签 - 现代简约版 */
   .date-label {
-    background: #f9fafb;
-    color: #6b7280;
-    border: 1px solid #e5e7eb;
+    background: var(--color-neutral-50);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-medium);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: 0.875rem;
     font-weight: 500;
@@ -254,7 +299,7 @@
   /* 网站标题样式 - 仅用于 MindTrace 品牌名 */
   .website-title {
     font-family: 'Caveat', cursive;
-    color: #374151;
+    color: var(--color-text-secondary);
     font-weight: 500;
     letter-spacing: 0.5px;
   }
@@ -278,6 +323,25 @@
     -ms-user-select: text;
     user-select: text;
   }
+
+  /* Semantic Color Utility Classes */
+  .text-primary { color: var(--color-text-primary); }
+  .text-secondary { color: var(--color-text-secondary); }
+  .text-muted { color: var(--color-text-muted); }
+  .text-subtle { color: var(--color-text-subtle); }
+  .text-caution { color: var(--color-caution); }
+  .text-danger { color: var(--color-danger-text); }
+  
+  .bg-interactive { background-color: var(--color-interactive-bg); }
+  .bg-interactive-hover:hover { background-color: var(--color-interactive-hover); }
+  .bg-interactive-active:active { background-color: var(--color-interactive-active); }
+  .bg-caution { background-color: var(--color-caution-bg); }
+  .bg-danger { background-color: var(--color-danger-bg); }
+  
+  .border-light { border-color: var(--color-border-light); }
+  .border-medium { border-color: var(--color-border-medium); }
+  .border-strong { border-color: var(--color-border-strong); }
+  .border-danger { border-color: var(--color-danger-border); }
 }
 
 /* Header 固定定位 */

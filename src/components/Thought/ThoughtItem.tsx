@@ -56,7 +56,7 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
             <span className="diary-text text-sm font-medium opacity-60">#{thought.number}</span>
             {thought.hidden && (
               <div title="Hidden thought">
-                <Icon name="lock" className="w-3 h-3 text-gray-400" />
+                <Icon name="lock" className="w-3 h-3 text-subtle" />
               </div>
             )}
           </div>

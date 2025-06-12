@@ -59,11 +59,59 @@ Sidebar: z-index: 50
 
 ## Design & UX Guidelines
 
-### 1. Color Consistency
-- Unlock/dangerous states: Orange (`text-orange-500`) - indicates caution
-- Regular actions: Gray tones
-- Error states: Red
-- Maintain consistent color meanings across all components
+### 1. Semantic Color System
+The application uses a comprehensive CSS variable-based color system for visual consistency and maintainability:
+
+#### Color Variables
+```css
+/* Text Colors */
+--color-text-primary: #111827    /* Main headings, important text */
+--color-text-secondary: #374151  /* Body text, secondary content */
+--color-text-muted: #6b7280      /* Subtle text, labels */
+--color-text-subtle: #9ca3af     /* Very light text, placeholders */
+
+/* State Colors */
+--color-caution: #ea580c         /* Unlock/warning states (orange) */
+--color-caution-bg: #fff7ed      /* Light orange backgrounds */
+--color-danger: #dc2626          /* Delete/error actions (red) */
+--color-danger-bg: #fef2f2       /* Light red backgrounds */
+--color-danger-text: #b91c1c     /* Error text */
+
+/* Interactive Colors */
+--color-interactive-bg: #f5f5f5       /* Form inputs, cards */
+--color-interactive-hover: #f9f9f9     /* Hover backgrounds */
+--color-interactive-active: #d4d4d4    /* Active/pressed states */
+
+/* Semantic Backgrounds */
+--color-bg-primary: #ffffff      /* Main backgrounds */
+--color-bg-secondary: #fafafa    /* Page backgrounds */
+--color-bg-card: #ffffff         /* Card backgrounds */
+
+/* Borders */
+--color-border-light: #f1f3f4    /* Subtle borders */
+--color-border-medium: #e5e7eb   /* Standard borders */
+--color-border-strong: #d1d5db   /* Emphasized borders */
+```
+
+#### Semantic Usage Rules
+- **Orange (Caution)**: Unlock states, warning actions - indicates user should proceed with awareness
+- **Red (Danger)**: Delete operations, error states - indicates destructive or problematic actions
+- **Gray Hierarchy**: Use text-primary → text-secondary → text-muted → text-subtle for information hierarchy
+- **Interactive Elements**: All hover effects use consistent background opacity/brightness
+
+#### Utility Classes
+```css
+.text-primary, .text-secondary, .text-muted, .text-subtle
+.text-caution, .text-danger
+.bg-interactive, .bg-interactive-hover, .bg-caution, .bg-danger
+.border-light, .border-medium, .border-strong, .border-danger
+```
+
+#### Icon Button Consistency
+All small icon buttons follow the same hover pattern:
+- Default: No background, semantic text color
+- Hover: Light background with consistent brightness across all states
+- Special states (unlock) maintain semantic colors but consistent hover brightness
 
 ### 2. Modern Minimalist Design
 - Clean, sans-serif typography (system fonts)
@@ -245,8 +293,34 @@ Components - Pure UI logic
 - Rate limiting
 - User data privacy enhancements
 
+## Recent Improvements
+
+### Color System Overhaul (December 2024)
+**Problem**: Inconsistent color usage across components with hardcoded Tailwind classes, making maintenance difficult and visual consistency poor.
+
+**Solution**: Implemented a comprehensive CSS variable-based semantic color system:
+
+#### What Was Done:
+1. **CSS Variables**: Created semantic color variables in `src/index.css` for text, state, interactive, background, and border colors
+2. **Utility Classes**: Added semantic utility classes (`.text-primary`, `.bg-interactive-hover`, etc.) for easier component usage
+3. **Component Updates**: Updated all major components to use semantic classes instead of hardcoded colors
+4. **Hover Consistency**: Standardized all icon button hover effects to use consistent background brightness
+5. **Documentation**: Updated both CLAUDE.md and architecture.md with comprehensive color system documentation
+
+#### Benefits:
+- **Maintainability**: Single source of truth for colors, easy to adjust theme
+- **Consistency**: All components follow the same visual patterns
+- **Readability**: Semantic names make code self-documenting
+- **Scalability**: Easy to extend or modify color scheme in the future
+
+#### Key Patterns Established:
+- Orange for caution/unlock states, red for danger/delete
+- Consistent gray hierarchy for text importance
+- Unified hover effects across all interactive elements
+- Semantic background colors with matching brightness levels
+
 ---
 
-**Last Updated**: December 8, 2024
-**Project Version**: Post-refactoring (Stages 1-2 completed)
-**Key Maintainer Guidelines**: Keep it simple, test thoroughly, prioritize user experience
+**Last Updated**: December 13, 2024
+**Project Version**: Post-color-system-overhaul
+**Key Maintainer Guidelines**: Keep it simple, test thoroughly, prioritize user experience, use semantic color classes

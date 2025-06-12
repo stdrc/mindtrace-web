@@ -62,11 +62,11 @@ export default function Modal({ isOpen, onClose, title, children, footer }: Moda
         ref={modalRef}
         className="diary-card max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl"
       >
-        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+        <div className="flex justify-between items-center px-6 py-4 border-b border-medium">
           <h2 className="diary-title text-lg select-none">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-600 rounded-full p-1 transition-colors active:bg-gray-100"
+            className="text-muted rounded-full p-1 transition-colors hover:bg-interactive-hover"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -79,7 +79,7 @@ export default function Modal({ isOpen, onClose, title, children, footer }: Moda
         </div>
         
         {footer && (
-          <div className="px-6 py-4 border-t border-gray-100 flex justify-end space-x-2">
+          <div className="px-6 py-4 border-t border-medium flex justify-end space-x-2">
             {footer}
           </div>
         )}

@@ -82,7 +82,7 @@ export default function ProfilePage() {
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+            <div className="bg-danger border border-danger text-danger px-4 py-3 rounded-lg mb-6 text-sm">
               {error}
             </div>
           )}
@@ -93,7 +93,7 @@ export default function ProfilePage() {
               <label className="block diary-text text-sm font-medium mb-2">
                 Email
               </label>
-              <div className="input bg-gray-50 cursor-not-allowed select-none">
+              <div className="input bg-interactive cursor-not-allowed select-none">
                 {user.email}
               </div>
               <p className="diary-text text-xs opacity-60 mt-1">

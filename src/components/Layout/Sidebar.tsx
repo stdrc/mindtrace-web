@@ -60,16 +60,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         transform ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         transition-transform duration-300 ease-in-out
         lg:transition-none lg:transform-none
-        border-r border-gray-200 lg:border-r-0
+        border-r border-medium lg:border-r-0
         lg:flex-shrink-0
       `}>
         <div className="h-full flex flex-col">
                     {/* Mobile header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:hidden">
-            <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
+          <div className="flex items-center justify-between p-4 border-b border-medium lg:hidden">
+            <h2 className="text-lg font-semibold text-primary">Menu</h2>
             <button
               onClick={onClose}
-              className="p-2 rounded-md text-gray-400 active:bg-gray-100"
+              className="p-2 rounded-md text-subtle hover:bg-interactive-hover"
             >
               <Icon name="x" className="w-5 h-5" />
             </button>
@@ -88,8 +88,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         w-full flex items-center px-3 py-2 text-sm font-medium rounded-md
                         transition-colors duration-200
                         ${isActive
-                          ? 'bg-gray-100 text-gray-900'
-                          : 'text-gray-600 active:bg-gray-100'
+                          ? 'bg-interactive text-primary'
+                          : 'text-muted bg-interactive-active'
                         }
                       `}
                     >
