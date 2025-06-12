@@ -199,7 +199,7 @@
       max-width: 85%; /* iPad上使用更大的宽度比例 */
     }
     
-    .diary-card {
+    .modern-card {
       padding: 1.25rem; /* iPad上使用中等padding */
     }
   }
@@ -210,14 +210,14 @@
       max-width: 100%;
     }
     
-    .diary-card {
+    .modern-card {
       margin: 0 0.25rem; /* 大屏手机上稍微增加边距 */
     }
   }
   
   /* 小屏手机优化 */
   @media (max-width: 413px) {
-    .diary-card {
+    .modern-card {
       margin: 0; /* 小屏手机上去掉边距 */
       border-radius: 6px; /* 稍微减小圆角 */
     }
@@ -279,33 +279,12 @@
     user-select: text;
   }
 
-  /* 保持向后兼容的类名映射 */
-  .diary-card {
-    @apply modern-card;
-  }
-
-  .diary-header {
-    @apply modern-header;
-  }
-
-  .diary-page {
-    @apply modern-page;
-  }
-
-  .diary-title {
-    @apply modern-title;
-  }
-
   /* 网站标题样式 - 仅用于 MindTrace 品牌名 */
   .website-title {
     font-family: 'Caveat', cursive;
     color: var(--color-text-secondary);
     font-weight: 500;
     letter-spacing: 0.5px;
-  }
-
-  .diary-text {
-    @apply modern-text;
   }
   
   /* 专门为可选中的内容添加类 */

@@ -60,10 +60,10 @@ export default function Modal({ isOpen, onClose, title, children, footer }: Moda
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-30 backdrop-blur-sm">
       <div 
         ref={modalRef}
-        className="diary-card max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl"
+        className="modern-card max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl"
       >
         <div className="flex justify-between items-center px-6 py-4 border-b border-medium">
-          <h2 className="diary-title text-lg select-none">{title}</h2>
+          <h2 className="modern-title text-lg select-none">{title}</h2>
           <button
             onClick={onClose}
             className="text-muted rounded-full p-1 transition-colors hover:bg-interactive-hover"

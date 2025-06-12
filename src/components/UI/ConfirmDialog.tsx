@@ -44,7 +44,7 @@ export default function ConfirmDialog({
         </>
       }
     >
-      <p className="diary-text select-none">
+      <p className="modern-text select-none">
         {config.content}
       </p>
     </Modal>

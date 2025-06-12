@@ -26,12 +26,12 @@ export default function Login() {
   };
 
   return (
-    <div className="h-full diary-page flex flex-col overflow-hidden">
-      <main className="flex-1 flex flex-col min-h-0 main-content scrollable-content">
+    <div className="h-full modern-page flex flex-col overflow-hidden">
+      <main className="flex-1 flex flex-col min-h-0 scrollable-content">
         <div className="w-full mx-auto px-3 py-4 sm:px-6 sm:py-6 md:px-8 flex-1 flex flex-col min-h-0 content-container">
           <div className="flex items-center justify-center flex-1">
-            <div className="app-container">
-              <div className="diary-card p-6 sm:p-8 w-full max-w-lg mx-auto">
+            <div>
+              <div className="modern-card p-6 sm:p-8 w-full max-w-lg mx-auto">
                 <div className="text-center mb-8">
                   <div className="mb-1">
                     <div className="w-20 h-20 mx-auto mb-2 flex items-center justify-center">
@@ -53,7 +53,7 @@ export default function Login() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="email" className="block diary-text text-sm font-medium mb-2">
+                    <label htmlFor="email" className="block modern-text text-sm font-medium mb-2">
                       Email
                     </label>
                     <input
@@ -68,7 +68,7 @@ export default function Login() {
                   </div>
 
                   <div>
-                    <label htmlFor="password" className="block diary-text text-sm font-medium mb-2">
+                    <label htmlFor="password" className="block modern-text text-sm font-medium mb-2">
                       Password
                     </label>
                     <input
@@ -93,7 +93,7 @@ export default function Login() {
                 </form>
 
                 <div className="text-center">
-                  <p className="diary-text text-sm opacity-0 h-0">
+                  <p className="modern-text text-sm opacity-0 h-0">
                     Account access is managed by the administrator
                   </p>
                 </div>

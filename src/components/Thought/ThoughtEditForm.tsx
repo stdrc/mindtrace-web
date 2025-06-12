@@ -60,7 +60,7 @@ export default function ThoughtEditForm({
         ref={textareaRef}
         value={editContent}
         onChange={handleChange}
-        className="input diary-text resize-none overflow-y-auto"
+        className="input modern-text resize-none overflow-y-auto"
         style={{ minHeight: '60px', maxHeight: '200px' }}
         autoFocus
         disabled={isLoading}

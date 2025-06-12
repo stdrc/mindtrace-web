@@ -98,7 +98,7 @@ export default function ThoughtList() {
       ))}
       
       {loading && (
-        <div ref={loadingRef} className="py-6 text-center diary-text">
+        <div ref={loadingRef} className="py-6 text-center modern-text">
           <div className="inline-block animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-gray-600"></div>
         </div>
       )}

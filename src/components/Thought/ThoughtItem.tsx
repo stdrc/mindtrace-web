@@ -50,10 +50,10 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
 
   return (
     <>
-      <div className="group diary-card p-3 sm:p-4 md:p-5">
+      <div className="group modern-card p-3 sm:p-4 md:p-5">
         <div className="flex justify-between items-start">
           <div className="flex items-center space-x-2">
-            <span className="diary-text text-sm font-medium opacity-60">#{thought.number}</span>
+            <span className="modern-text text-sm font-medium opacity-60">#{thought.number}</span>
             {thought.hidden && (
               <div title="Hidden thought">
                 <Icon name="lock" className="w-3 h-3 text-subtle" />
@@ -88,7 +88,7 @@ export default function ThoughtItem({ thought }: ThoughtItemProps) {
                 {/* Hidden thought - minimal placeholder */}
               </div>
             ) : (
-              <p className="diary-text whitespace-pre-wrap leading-relaxed thought-content">{thought.content}</p>
+              <p className="modern-text whitespace-pre-wrap leading-relaxed thought-content">{thought.content}</p>
             )}
           </div>
         )}

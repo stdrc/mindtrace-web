@@ -98,7 +98,7 @@ export default function ThoughtInput() {
           onCompositionStart={handleCompositionStart}
           onCompositionEnd={handleCompositionEnd}
           disabled={isSubmitting}
-          className={`input diary-text resize-none overflow-y-auto ${
+          className={`input modern-text resize-none overflow-y-auto ${
             isSubmitting ? 'opacity-60 cursor-not-allowed' : ''
           }`}
           style={{ minHeight: '60px', maxHeight: '200px' }}

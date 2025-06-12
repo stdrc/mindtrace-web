@@ -50,8 +50,8 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
 
   return (
     <>
-      <header className="diary-header fixed-header">
-        <div className="app-container">
+      <header className="modern-header fixed-header">
+        <div>
           <div className="flex justify-between h-16 items-center px-3 sm:px-6 md:px-8">
             <div className="flex items-center space-x-4">
               {user && (
@@ -123,7 +123,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           </>
         }
       >
-        <p className="diary-text selectable-text">
+        <p className="modern-text selectable-text">
           Are you sure you want to show hidden content?
         </p>
       </Modal>

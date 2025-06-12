@@ -252,7 +252,7 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
       {!isContentGenerated ? (
         <div className="space-y-4">
           <div>
-            <label className="block diary-text text-sm font-medium mb-2">
+            <label className="block modern-text text-sm font-medium mb-2">
               Export thoughts from the last:
             </label>
             <select
@@ -268,21 +268,21 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
             </select>
           </div>
           
-          <p className="diary-text text-sm opacity-75">
+          <p className="modern-text text-sm opacity-75">
             This will compile all your thoughts from the selected time period into a single Markdown file.
           </p>
         </div>
       ) : (
         <div className="space-y-4">
           <div>
-            <h3 className="diary-text font-medium mb-2">Export Preview</h3>
+            <h3 className="modern-text font-medium mb-2">Export Preview</h3>
             <div className="bg-interactive border border-medium rounded-lg p-4 max-h-64 overflow-y-auto">
-              <pre className="diary-text text-sm whitespace-pre-wrap font-mono">
+              <pre className="modern-text text-sm whitespace-pre-wrap font-mono">
                 {previewContent}
               </pre>
               {exportedContent.length > 500 && (
                 <div className="mt-2 text-center">
-                  <span className="diary-text text-xs text-muted">
+                  <span className="modern-text text-xs text-muted">
                     ... and {Math.ceil((exportedContent.length - 500) / 100)} more lines
                   </span>
                 </div>
@@ -290,7 +290,7 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
             </div>
           </div>
           
-          <p className="diary-text text-sm opacity-75">
+          <p className="modern-text text-sm opacity-75">
             Content is ready for download or copying to clipboard.
           </p>
         </div>
