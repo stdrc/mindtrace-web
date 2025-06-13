@@ -54,7 +54,7 @@ export default function ThoughtList() {
         <div key={date} className="space-y-3 sm:space-y-4">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
+              <div className="w-full border-t border-medium"></div>
             </div>
             <div className="relative flex justify-center">
               <span className="date-label px-4 py-2 rounded-full">
@@ -99,7 +99,7 @@ export default function ThoughtList() {
       
       {loading && (
         <div ref={loadingRef} className="py-6 text-center modern-text">
-          <div className="inline-block animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-gray-600"></div>
+          <div className="inline-block animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-spinner"></div>
         </div>
       )}
       
@@ -107,7 +107,7 @@ export default function ThoughtList() {
         <div className="py-8">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
+              <div className="w-full border-t border-medium"></div>
             </div>
             <div className="relative flex justify-center">
               <span className="date-label px-4 py-2 rounded-full">

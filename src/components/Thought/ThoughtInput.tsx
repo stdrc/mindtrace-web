@@ -80,8 +80,8 @@ export default function ThoughtInput() {
           onClick={() => setIsHidden(!isHidden)}
           className={`w-10 h-10 min-w-10 rounded-full text-sm font-medium transition-all duration-150 flex items-center justify-center ${
             isHidden
-              ? 'bg-gray-900 text-white'
-              : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+              ? 'bg-interactive-selected text-interactive-selected'
+              : 'bg-interactive text-muted hover:bg-interactive-hover'
           }`}
           title={isHidden ? 'This thought will be hidden' : 'This thought will be visible'}
         >

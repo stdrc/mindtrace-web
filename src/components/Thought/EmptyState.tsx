@@ -3,7 +3,7 @@ export default function EmptyState() {
     <div className="flex flex-col items-center justify-center py-12">
       <div className="modern-card p-8 text-center max-w-md mx-auto">
         <div className="mb-6">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-interactive shadow-sm border border-medium flex items-center justify-center">
             <img 
               src="/logo.png" 
               alt="MindTrace Logo" 

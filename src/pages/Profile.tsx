@@ -33,7 +33,7 @@ export default function ProfilePage() {
           <div className="w-full mx-auto px-3 py-4 sm:px-6 sm:py-6 md:px-8 flex-1 flex flex-col min-h-0 content-container">
             <div className="flex items-center justify-center flex-1">
               <div className="text-center modern-card p-8">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600 mb-4"></div>
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-spinner mb-4"></div>
                 <p className="modern-text">Loading your profile...</p>
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function ProfilePage() {
               <label className="block modern-text text-sm font-medium mb-2">
                 Email
               </label>
-              <div className="input bg-interactive cursor-not-allowed select-none">
+              <div className="input bg-interactive select-none">
                 {user.email}
               </div>
               <p className="modern-text text-xs opacity-60 mt-1">
@@ -174,7 +174,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Account Actions */}
-            <div className="pt-4 border-t border-gray-100">
+            <div className="pt-4 border-t border-light">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="modern-text text-sm font-medium mb-1">

@@ -56,7 +56,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <div className={`
         fixed lg:static inset-y-0 left-0 z-50 lg:z-auto
-        w-64 lg:w-56 bg-white lg:bg-transparent
+        w-64 lg:w-56 bg-interactive lg:bg-transparent
         transform ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         transition-transform duration-300 ease-in-out
         lg:transition-none lg:transform-none

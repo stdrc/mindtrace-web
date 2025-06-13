@@ -91,7 +91,7 @@ export default function ThoughtActions({
               className="fixed inset-0 z-10" 
               onClick={() => setIsMenuOpen(false)}
             />
-            <div className="absolute right-0 top-10 z-20 w-48 bg-white rounded-xl shadow-lg overflow-hidden">
+            <div className="absolute right-0 top-10 z-20 w-48 bg-interactive rounded-xl shadow-lg overflow-hidden border border-medium">
               <button
                 onClick={handleEdit}
                 className="w-full px-4 py-3 text-left text-secondary hover:bg-interactive-hover flex items-center space-x-2 transition-colors duration-150 text-sm first:rounded-t-xl"

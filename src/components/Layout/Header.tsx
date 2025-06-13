@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useHiddenToggleContext } from '../../contexts/HiddenToggleContext';
 import { useThoughts } from '../../contexts/ThoughtContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import { navigateToThoughtsAndRefresh } from '../../utils/navigationUtils';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
@@ -17,6 +18,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
   const { user } = useAuth();
   const { hideHiddenThoughts, toggleHiddenVisibility } = useHiddenToggleContext();
   const { refreshThoughts } = useThoughts();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [isShowHiddenModalOpen, setIsShowHiddenModalOpen] = useState(false);
@@ -76,27 +78,39 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
               </button>
             </div>
             
-            {user && !isProfilePage && (
+            {user && (
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={handleEyeButtonClick}
-                  className={`p-2 rounded-full text-sm font-medium transition-all duration-150 ${
-                    hideHiddenThoughts
-                      ? 'text-subtle hover:bg-interactive-hover'
-                      : 'text-caution hover:bg-caution'
-                  }`}
-                  title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
+                  onClick={toggleTheme}
+                  className="p-2 rounded-full text-sm font-medium transition-all duration-150 text-secondary hover:bg-interactive-hover"
+                  title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
                 >
-                  <Icon name={hideHiddenThoughts ? 'lock' : 'unlock'} />
+                  <Icon name={theme === 'light' ? 'moon' : 'sun'} />
                 </button>
                 
-                <button
-                  onClick={() => setIsExportModalOpen(true)}
-                  className="p-2 rounded-full text-sm font-medium transition-all duration-150 text-secondary hover:bg-interactive-hover"
-                  title="Export thoughts"
-                >
-                  <Icon name="archive" />
-                </button>
+                {!isProfilePage && (
+                  <>
+                    <button
+                      onClick={handleEyeButtonClick}
+                      className={`p-2 rounded-full text-sm font-medium transition-all duration-150 ${
+                        hideHiddenThoughts
+                          ? 'text-subtle hover:bg-interactive-hover'
+                          : 'text-caution hover:bg-caution'
+                      }`}
+                      title={hideHiddenThoughts ? 'Unlock to show hidden thoughts' : 'Lock to hide hidden thoughts'}
+                    >
+                      <Icon name={hideHiddenThoughts ? 'lock' : 'unlock'} />
+                    </button>
+                    
+                    <button
+                      onClick={() => setIsExportModalOpen(true)}
+                      className="p-2 rounded-full text-sm font-medium transition-all duration-150 text-secondary hover:bg-interactive-hover"
+                      title="Export thoughts"
+                    >
+                      <Icon name="archive" />
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>

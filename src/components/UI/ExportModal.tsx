@@ -225,7 +225,7 @@ export default function ExportModal({ isOpen, onClose }: ExportModalProps) {
                 onClick={handleCopy}
                 disabled={copyStatus === 'copying'}
                 className={`flex items-center space-x-2 ${
-                  copyStatus === 'success' ? 'bg-green-50 border-green-200 text-green-700' :
+                  copyStatus === 'success' ? 'bg-success border-success text-success' :
                   copyStatus === 'error' ? 'bg-danger border-danger text-danger' : ''
                 }`}
               >
